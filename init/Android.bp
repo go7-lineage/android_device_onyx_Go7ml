@@ -7,14 +7,7 @@ prebuilt_etc {
     name: "fstab.go7ml",
     src: "fstab.go7ml",
     vendor: true,
-}
-
-prebuilt_etc {
-    name: "fstab.go7ml.ramdisk",
-    src: "fstab.go7ml",
-    filename: "fstab.go7ml",
-    ramdisk: true,
-    relative_install_path: "first_stage_ramdisk",
+    ramdisk_available: true,
 }
 
 prebuilt_etc {
