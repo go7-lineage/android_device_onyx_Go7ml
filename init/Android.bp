@@ -1,0 +1,44 @@
+//
+// SPDX-FileCopyrightText: The LineageOS Project
+// SPDX-License-Identifier: Apache-2.0
+//
+
+prebuilt_etc {
+    name: "fstab.go7ml",
+    src: "fstab.go7ml",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "fstab.go7ml.ramdisk",
+    src: "fstab.go7ml",
+    filename: "fstab.go7ml",
+    ramdisk: true,
+    relative_install_path: "first_stage_ramdisk",
+}
+
+prebuilt_etc {
+    name: "init.go7ml.rc",
+    src: "init.go7ml.rc",
+    sub_dir: "init/hw",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.go7ml.logdump.sh",
+    src: "init.go7ml.logdump.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.go7ml.drm.sh",
+    src: "init.go7ml.drm.sh",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "ueventd.go7ml.rc",
+    filename: "ueventd.rc",
+    src: "ueventd.go7ml.rc",
+    vendor: true,
+}

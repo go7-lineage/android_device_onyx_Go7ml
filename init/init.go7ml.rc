@@ -1,0 +1,84 @@
+# Go 7 on the mainline kernel
+
+# drm_hwcomposer's device: the onyx-epd card, found by driver (card numbers follow probe order)
+service vendor.go7ml-drm-card /vendor/bin/init.go7ml.drm.sh
+    user system
+    group system graphics
+    oneshot
+    disabled
+
+on early-boot
+    # before class hal (the composer) starts
+    exec_start vendor.go7ml-drm-card
+
+    # e-ink: /dev/ebc (full refreshes, ebcsend) and the onyx-epd UI policy settings (sepdc/debug)
+    chown system system /dev/ebc
+    chmod 0660 /dev/ebc
+    chown system system /sys/devices/virtual/sepdc/debug/cut_frame_num
+    chmod 0660 /sys/devices/virtual/sepdc/debug/cut_frame_num
+    chown system system /sys/devices/virtual/sepdc/debug/ui_mode
+    chown system system /sys/devices/virtual/sepdc/debug/ui_gc
+    chown system system /sys/devices/virtual/sepdc/debug/ui_full
+    chown system system /sys/devices/virtual/sepdc/debug/ui_a2cut
+
+    # charge limits (Lineage health)
+    chown system system /sys/class/power_supply/pm7250b-charger/charge_control_start_threshold
+    chown system system /sys/class/power_supply/pm7250b-charger/charge_control_end_threshold
+
+# The QS tile and Settings write the shim's properties; the driver's UI policy reads them from sysfs.
+# Unparsable values are rejected by sysfs and leave the old setting (the shim fell back to defaults).
+on property:persist.vendor.eink_shim.mode=*
+    write /sys/devices/virtual/sepdc/debug/ui_mode ${persist.vendor.eink_shim.mode}
+
+on property:persist.vendor.eink_shim.gc=*
+    write /sys/devices/virtual/sepdc/debug/ui_gc ${persist.vendor.eink_shim.gc}
+
+on property:persist.vendor.eink_shim.full=*
+    write /sys/devices/virtual/sepdc/debug/ui_full ${persist.vendor.eink_shim.full}
+
+on property:persist.vendor.eink_shim.a2cut=*
+    write /sys/devices/virtual/sepdc/debug/ui_a2cut ${persist.vendor.eink_shim.a2cut}
+
+on boot
+    # USB gadget controller name on mainline (dwc3 at a600000; /sys/class/udc on the device)
+    setprop vendor.usb.controller a600000.usb
+
+# Remote filesystem and TFTP for the modem DSP (as dragonboard's init.utils.rc, without db845c's parts).
+# rmtfs needs the reserved rmtfs memory in the DT (not described yet: address to read from stock).
+service rmtfs /vendor/bin/rmtfs -o /dev/block/by-name -P -r -s
+    class core
+    user root
+    group system
+    disabled
+    oneshot
+
+service tqftpserv /vendor/bin/tqftpserv
+    class core
+    user root
+    group system
+    disabled
+    oneshot
+
+on post-fs-data
+    mkdir /data/vendor/tmp
+    mkdir /data/vendor/readwrite
+    mkdir /data/vendor/readonly
+    mkdir /data/vendor/readonly/firmware
+    mkdir /data/vendor/readonly/firmware/image
+    start tqftpserv
+    start rmtfs
+
+on shutdown
+    stop rmtfs
+
+# First-boot aid: kernel log (init logs there too, printk.devkmsg=on) to the logdump partition every 10 s
+# for 10 min, readable from EDL with `edl r logdump`. Remove once the port boots reliably.
+service vendor.go7ml-logdump /vendor/bin/init.go7ml.logdump.sh
+    class core
+    user root
+    group system
+    disabled
+    oneshot
+
+on init
+    start vendor.go7ml-logdump

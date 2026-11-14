@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!-- Allow 180-degree rotation when auto-rotate is on, so the reader can
+         be held with the page keys on either side (match stock) -->
+    <bool name="config_allowAllRotations">true</bool>
+
+    <!-- E-ink: battery saver must not switch to the dark theme, which
+         redraws the whole panel inverted and ghosts more -->
+    <bool name="config_batterySaver_full_enableNightMode">false</bool>
+
+    <!-- E-ink: don't zoom the wallpaper when opening shade or apps (match stock) -->
+    <item name="config_wallpaperMaxScale" format="float" type="dimen">1.0</item>
+
+    <bool name="config_automatic_brightness_available">false</bool>
+
+    <!-- E-ink: no elevation shadows, the grey gradients dither badly -->
+    <item type="dimen" format="float" name="ambient_shadow_alpha">0</item>
+    <item type="dimen" format="float" name="spot_shadow_alpha">0</item>
+
+    <!-- E-ink: no screensaver -->
+    <bool name="config_dreamsSupported">false</bool>
+</resources>

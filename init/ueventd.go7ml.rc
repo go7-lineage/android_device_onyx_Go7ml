@@ -1,0 +1,14 @@
+# Go 7 on the mainline kernel (vendor ueventd; the platform's ueventd.rc covers the generic nodes)
+
+# onyx-epd (composer) and render nodes (minigbm, Mesa); the card number varies, see init.go7ml.drm.sh.
+# The msm card gets the same mode; only the composer would open a card, and it's pointed at onyx-epd.
+/dev/dri/card*            0666   system     graphics
+/dev/dri/renderD*         0666   system     graphics
+/dev/ebc                  0660   system     system
+
+# remoteprocs, rmtfs, qrtr (as device/linaro/dragonboard/ueventd.common.rc)
+/dev/qcom_rmtfs_mem1      0660   system     system
+/dev/rpmsg_ctrl*          0660   system     system
+/dev/fastrpc-*            0666   system     system
+
+firmware_directories /vendor/firmware/

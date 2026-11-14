@@ -1,0 +1,3 @@
+genfscon sysfs /devices/virtual/sepdc/debug      u:object_r:sysfs_sepdc:s0
+# TODO after the first boot: label the charger/fuel-gauge power_supply nodes sysfs_batteryinfo for health
+# (paths under /devices/platform/soc@0/c440000.spmi/... depend on the final DT)

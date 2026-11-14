@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Local manifest for the Go 7 on the 6.18 kernel: .repo/local_manifests/go7ml.xml on top of
+  repo init -u https://github.com/LineageOS/android.git -b lineage-24.0 --git-lfs
+  "github" = https://github.com/, "aosp" = android.googlesource.com at android-17.0.0_r1 (both from
+  Lineage's default.xml). Don't combine with the Go7 (stock kernel) local manifest: both list hardware/onyx.
+-->
+<manifest>
+  <project name="go7-lineage/android_device_onyx_Go7ml" path="device/onyx/Go7ml" remote="github" revision="lineage-24.0" />
+  <project name="go7-lineage/android_vendor_onyx_Go7ml" path="vendor/onyx/Go7ml" remote="github" revision="lineage-24.0" />
+  <project name="go7-lineage/android_kernel_onyx_sm7225" path="kernel/onyx/sm7225-6.18" remote="github" revision="lineage-24.0" clone-depth="1" />
+  <project name="go7-lineage/eink-shim" path="hardware/onyx/eink" remote="github" revision="master" />
+  <project name="go7-lineage/frontlightd" path="hardware/onyx/frontlight" remote="github" revision="master" />
+
+  <!-- graphics makefiles/sepolicy (drm_hwcomposer, minigbm_msm, swangle), qrtr/pd-mapper/rmtfs/tqftpserv -->
+  <project name="device/linaro/dragonboard" path="device/linaro/dragonboard" remote="aosp" />
+</manifest>
