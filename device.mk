@@ -100,11 +100,20 @@ $(call soong_config_set_bool,lineage_health,charging_control_supports_toggle,fal
 $(call soong_config_set,lineage_health,charging_control_limit_start_path,/sys/class/power_supply/pm7250b-charger/charge_control_start_threshold)
 $(call soong_config_set,lineage_health,charging_control_limit_stop_path,/sys/class/power_supply/pm7250b-charger/charge_control_end_threshold)
 
-# Audio: none yet (internal audio is groundwork only, kernel/mainline/battery-audio.md); USB/BT audio later
+# Audio: AOSP's default HAL (internal audio is groundwork only, kernel/mainline/battery-audio.md)
 PRODUCT_PACKAGES += \
+    com.android.hardware.audio \
     tinymix \
     tinyplay \
     tinycap
+PRODUCT_COPY_FILES += \
+    device/linaro/dragonboard/etc/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
+    hardware/interfaces/audio/aidl/default/audio_effects_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects_config.xml \
+    frameworks/av/services/audiopolicy/config/audio_policy_volumes.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_volumes.xml \
+    frameworks/av/services/audiopolicy/config/bluetooth_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_audio_policy_configuration_7_0.xml \
+    frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_VENDOR)/etc/default_volume_tables.xml \
+    frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/r_submix_audio_policy_configuration.xml \
+    frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration.xml
 
 # Media: software codecs only, as device/onyx/Go7
 PRODUCT_VENDOR_PROPERTIES += \
