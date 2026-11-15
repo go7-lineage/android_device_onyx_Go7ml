@@ -39,6 +39,12 @@ on property:persist.vendor.eink_shim.full=*
 on property:persist.vendor.eink_shim.a2cut=*
     write /sys/devices/virtual/sepdc/debug/ui_a2cut ${persist.vendor.eink_shim.a2cut}
 
+on fs
+    mount_all --early
+
+on late-fs
+    mount_all --late
+
 on boot
     # USB gadget controller name on mainline (dwc3 at a600000; /sys/class/udc on the device)
     setprop vendor.usb.controller a600000.usb
