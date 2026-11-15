@@ -55,9 +55,11 @@ waveform) and its `Go7ml-vendor.mk`.
 
 ## Flashing
 
-Onyx's fastboot has no `flash`; everything goes through EDL, as for Go7: `boot_X`, `dtbo_X`
-(`prebuilts/dtbo-zero.img`), `vbmeta_X`, `vbmeta_system_X`, `super`. Wipe `userdata` and `metadata`
-when coming from Go7 (different vendor, different encryption setup).
+Onyx's fastboot has no `flash`; everything goes through EDL, as for Go7: `boot_a`, `dtbo_a`
+(`prebuilts/dtbo-zero.img`), `vbmeta_a`, `vbmeta_system_a`, `super`. Slot `_a` only: `super.img` holds just
+the `_a` logical partitions, and `super` and `userdata` are shared between the slots, so this replaces a
+Go7 install. Wipe `userdata` and `metadata` when coming from Go7 (different vendor, different encryption
+setup).
 
 ## First-boot aids (remove once it boots reliably)
 
