@@ -127,6 +127,8 @@ BOARD_VENDOR_SEPOLICY_DIRS += \
     $(DEVICE_PATH)/sepolicy/vendor \
     hardware/onyx/frontlight/sepolicy
 
+DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/manifest.xml
+
 # Verified boot (unlocked device; test keys unless a custom key is set, as device/onyx/Go7)
 BOARD_AVB_ENABLE := true
 ifneq (,$(AVB_CUSTOM_KEY_PATH))
