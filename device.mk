@@ -47,7 +47,7 @@ $(call inherit-product, device/linaro/dragonboard/shared/graphics/swangle/device
 # own client, onyx-epd). The refresh policy runs in onyx-epd (ui_* in sepdc/debug); no composer patch.
 PRODUCT_PACKAGES += \
     init.go7ml.drm.sh
-PRODUCT_VENDOR_PROPERTIES += \
+PRODUCT_PRODUCT_PROPERTIES += \
     ro.sf.lcd_density=300
 
 # E-ink: QS tile (writes persist.vendor.eink_shim.*, mapped to the driver in init.go7ml.rc), frontlight
