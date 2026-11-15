@@ -114,7 +114,6 @@ BOARD_VENDOR_SEPOLICY_DIRS += \
     device/linaro/dragonboard/shared/graphics/swangle/sepolicy
 
 # Wi-Fi: ath10k-snoc + nl80211
-BOARD_WLAN_DEVICE := qcwcn
 BOARD_HOSTAPD_DRIVER := NL80211
 BOARD_WPA_SUPPLICANT_DRIVER := NL80211
 WPA_SUPPLICANT_VERSION := VER_0_8_X
