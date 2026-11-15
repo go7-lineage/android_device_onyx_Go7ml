@@ -82,3 +82,5 @@ service vendor.go7ml-logdump /vendor/bin/init.go7ml.logdump.sh
 
 on init
     start vendor.go7ml-logdump
+    wait /dev/block/platform/soc@0/7c4000.mmc
+    symlink /dev/block/platform/soc@0/7c4000.mmc /dev/block/bootdevice
