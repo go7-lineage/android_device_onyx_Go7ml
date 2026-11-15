@@ -75,7 +75,9 @@ BOARD_KERNEL_CMDLINE := \
     printk.devkmsg=on \
     deferred_probe_timeout=30 \
     clk_ignore_unused \
-    pd_ignore_unused
+    pd_ignore_unused \
+    androidboot.audio.tinyalsa.ignore_output=true \
+    androidboot.audio.tinyalsa.simulate_input=true
 
 # Firmware files are ELF (DSP/GPU images) copied with PRODUCT_COPY_FILES (as db845c)
 BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
