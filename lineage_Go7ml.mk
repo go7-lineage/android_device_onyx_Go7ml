@@ -6,6 +6,8 @@
 # Onyx Boox Go 7 on the mainline-based 6.18 kernel (no QTI vendor blobs). The Onyx-kernel port is
 # device/onyx/Go7; this tree only shares its overlays and the onyx hardware/ repos.
 
+TARGET_REQUIRES_HIDL_CAS_HAL := false
+
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
 
