@@ -7,7 +7,8 @@ LOCAL_PATH := device/onyx/Go7ml
 
 PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH) \
-    device/linaro/dragonboard
+    device/linaro/dragonboard \
+    hardware/qcom-caf/bootctrl
 
 # A/B
 $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch.mk)
@@ -33,7 +34,6 @@ PRODUCT_SHIPPING_API_LEVEL := 30
 PRODUCT_PACKAGES += \
     android.hardware.boot-service.qti \
     android.hardware.boot-service.qti.recovery
-$(call soong_config_set_bool,QTI_GPT_UTILS,USE_BSG_FRAMEWORK,false)
 
 # Graphics (device/linaro/dragonboard): drm_hwcomposer, minigbm, SwiftShader + ANGLE. No GPU at first;
 # Mesa/freedreno later (kernel/mainline/android-mainline.md, "Order").
