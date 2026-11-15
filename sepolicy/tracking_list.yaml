@@ -1,0 +1,5 @@
+coredomain_in_vendor:
+  - domain: tinymix
+platform_file_in_vendor_file_contexts:
+  - path: /(system|vendor)/lib(64)?/libdrm.so
+  - path: /system/bin/tinymix

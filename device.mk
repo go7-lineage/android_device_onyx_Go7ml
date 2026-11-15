@@ -10,6 +10,8 @@ PRODUCT_SOONG_NAMESPACES += \
     device/linaro/dragonboard \
     hardware/qcom-caf/bootctrl
 
+PRODUCT_SELINUX_TREBLE_LABELING_TRACKING_LIST_FILE := $(LOCAL_PATH)/sepolicy/tracking_list.yaml
+
 # A/B
 $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch.mk)
 AB_OTA_POSTINSTALL_CONFIG += \
