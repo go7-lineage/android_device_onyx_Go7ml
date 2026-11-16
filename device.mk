@@ -31,6 +31,15 @@ PRODUCT_BUILD_SUPER_PARTITION := true
 # The board launched with Android 11 (stock); keep its shipping level
 PRODUCT_SHIPPING_API_LEVEL := 30
 
+# ART heap: stock's values, as device/onyx/Go7
+PRODUCT_VENDOR_PROPERTIES += \
+    dalvik.vm.heapgrowthlimit=256m \
+    dalvik.vm.heapmaxfree=8m \
+    dalvik.vm.heapminfree=512k \
+    dalvik.vm.heapsize=512m \
+    dalvik.vm.heapstartsize=8m \
+    dalvik.vm.heaptargetutilization=0.75
+
 # Boot control: QTI's (source, hardware/qcom-caf/bootctrl), as device/onyx/Go7. The stock ABL selects the
 # slot from GPT attribute bits; AOSP's default HAL keeps slot state in misc, which ABL doesn't read.
 PRODUCT_PACKAGES += \
