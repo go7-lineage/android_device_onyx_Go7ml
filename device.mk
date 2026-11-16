@@ -87,9 +87,11 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.wifi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.xml \
     device/linaro/dragonboard/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
 
-# Bluetooth (WCN39xx over hci_qca; AOSP's Linux HCI HAL)
+# Bluetooth (WCN39xx over hci_qca; AOSP's Linux HCI HAL, dragonboard's bdaddr gives the controller an address)
 PRODUCT_PACKAGES += \
-    android.hardware.bluetooth-service.default
+    android.hardware.bluetooth-service.default \
+    bdaddr \
+    set_bdaddr.sh
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.bluetooth.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth.xml \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth_le.xml

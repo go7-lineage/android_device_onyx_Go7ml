@@ -29,6 +29,12 @@ sh_binary {
     vendor: true,
 }
 
+sh_binary {
+    name: "set_bdaddr.sh",
+    src: "set_bdaddr.sh",
+    vendor: true,
+}
+
 prebuilt_etc {
     name: "ueventd.go7ml.rc",
     filename: "ueventd.rc",
