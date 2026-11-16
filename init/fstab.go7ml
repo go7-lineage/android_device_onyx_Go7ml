@@ -8,8 +8,6 @@ vendor                                          /vendor       erofs   ro        
 # no inline crypto engine driver for the eMMC on 6.18 [?]: software FBE (no inlinecrypt)
 /dev/block/by-name/userdata                     /data         f2fs    noatime,nosuid,nodev,discard,reserve_root=32768,resgid=1065  latemount,wait,check,formattable,quota,reservedsize=128M,fileencryption=aes-256-xts:aes-256-cts:v2,keydirectory=/metadata/vold/metadata_encryption,checkpoint=fs
 /dev/block/by-name/misc                         /misc         emmc    defaults                                     defaults
-# modem partition: the stock DSP firmware (rmtfs/tqftpserv also read it); packed copies are in /vendor/firmware
-/dev/block/by-name/modem                        /vendor/firmware_mnt vfat ro,shortname=lower,uid=1000,gid=1000,dmask=227,fmask=337,context=u:object_r:firmware_file:s0 wait,slotselect
 /devices/platform/soc@0/8804000.mmc/mmc_host*   auto          auto    defaults                                     voldmanaged=sdcard1:auto
 /devices/platform/soc@0/a6f8800.usb/*/usb*      auto          auto    defaults                                     voldmanaged=usb1:auto
 /dev/block/zram0                                none          swap    defaults                                     zramsize=50%

@@ -24,7 +24,7 @@ booted on the device). Plan and reasoning: `kernel/mainline/android-mainline.md`
 | Filesystems | ext4 | erofs (system, vendor, product, system_ext) |
 
 Kept from the stock layout: header v2 boot image with offsets as stock, the stock partition sizes and super
-group size, A/B with QTI's boot control HAL (ABL reads the GPT slot attributes), modem partition mount.
+group size, A/B with QTI's boot control HAL (ABL reads the GPT slot attributes).
 
 ## Getting the source
 
