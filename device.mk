@@ -46,12 +46,13 @@ PRODUCT_PACKAGES += \
     android.hardware.boot-service.qti \
     android.hardware.boot-service.qti.recovery
 
-# Graphics (device/linaro/dragonboard): drm_hwcomposer, minigbm, SwiftShader + ANGLE. No GPU at first;
-# Mesa/freedreno later (kernel/mainline/android-mainline.md, "Order").
-TARGET_USES_SWR := true
+# Graphics: drm_hwcomposer and minigbm (device/linaro/dragonboard), Mesa freedreno/turnip (vendor/onyx/mesa)
 $(call inherit-product, device/linaro/dragonboard/shared/graphics/drm_hwcomposer/device.mk)
 $(call inherit-product, device/linaro/dragonboard/shared/graphics/minigbm_msm/device.mk)
-$(call inherit-product, device/linaro/dragonboard/shared/graphics/swangle/device.mk)
+$(call inherit-product, vendor/onyx/mesa/mesa.mk)
+# onyx-epd reads frames with the CPU: linear buffers only
+PRODUCT_VENDOR_PROPERTIES += \
+    vendor.minigbm.debug=nocompression
 
 # The composer uses only the onyx-epd card; init.go7ml.drm.sh sets vendor.hwc.drm.device to it at early-boot
 # (with msm.separate_gpu_kms=1 there are three cards: adreno, msm = the e-ink DSI link driven by the kernel's

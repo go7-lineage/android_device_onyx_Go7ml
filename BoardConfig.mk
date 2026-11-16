@@ -109,11 +109,10 @@ BOARD_INCLUDE_RECOVERY_DTBO := true
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/init/fstab.go7ml
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 
-# Graphics: drm_hwcomposer on the e-ink card (onyx-epd, see init.go7ml.drm.sh), minigbm, SwiftShader/ANGLE first (no GPU)
+# Graphics: drm_hwcomposer on the e-ink card (onyx-epd, see init.go7ml.drm.sh), minigbm, Mesa
 include device/linaro/dragonboard/shared/graphics/drm_hwcomposer/BoardConfig.mk
 BOARD_VENDOR_SEPOLICY_DIRS += \
-    device/linaro/dragonboard/shared/graphics/minigbm_msm/sepolicy \
-    device/linaro/dragonboard/shared/graphics/swangle/sepolicy
+    device/linaro/dragonboard/shared/graphics/minigbm_msm/sepolicy
 
 # Wi-Fi: ath10k-snoc + nl80211
 BOARD_HOSTAPD_DRIVER := NL80211

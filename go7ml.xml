@@ -2,10 +2,11 @@
 <manifest>
   <project name="go7-lineage/android_device_onyx_Go7ml" path="device/onyx/Go7ml" remote="github" revision="lineage-24.0" />
   <project name="go7-lineage/android_vendor_onyx_Go7ml" path="vendor/onyx/Go7ml" remote="github" revision="lineage-24.0" />
+  <project name="go7-lineage/android_vendor_onyx_mesa" path="vendor/onyx/mesa" remote="github" revision="master" />
   <project name="go7-lineage/android_kernel_onyx_sm7225" path="kernel/onyx/sm7225-6.18" remote="github" revision="lineage-24.0" clone-depth="1" />
   <project name="go7-lineage/eink-shim" path="hardware/onyx/eink" remote="github" revision="master" />
   <project name="go7-lineage/frontlightd" path="hardware/onyx/frontlight" remote="github" revision="master" />
 
-  <!-- graphics makefiles/sepolicy (drm_hwcomposer, minigbm_msm, swangle), qrtr/pd-mapper/rmtfs/tqftpserv -->
+  <!-- graphics makefiles/sepolicy (drm_hwcomposer, minigbm_msm), qrtr/pd-mapper/rmtfs/tqftpserv -->
   <project name="device/linaro/dragonboard" path="device/linaro/dragonboard" remote="aosp" />
 </manifest>

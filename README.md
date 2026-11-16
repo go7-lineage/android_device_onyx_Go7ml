@@ -15,7 +15,7 @@ booted on the device). Plan and reasoning: `kernel/mainline/android-mainline.md`
 | Kernel | prebuilt stock | built from source, `TARGET_KERNEL_CONFIG` = `gki_defconfig` + go7 fragments |
 | DTB / DTBO | stock | ours (exactly one DTB) / `prebuilts/dtbo-zero.img` (zeroed: ABL uses the DTB as-is) |
 | Composer | QTI composer + `libeink_shim` | stock drm_hwcomposer on the onyx-epd card (found at boot); refresh policy in the kernel driver |
-| GPU | Adreno blobs | none at first (SwiftShader + ANGLE), Mesa/freedreno later |
+| GPU | Adreno blobs | Mesa freedreno (GLES) and turnip (Vulkan), prebuilt in `vendor/onyx/mesa` |
 | Gralloc | QTI | minigbm |
 | Wi-Fi / BT | qcacld / QTI BT | ath10k-snoc + wpa_supplicant (no vendor Wi-Fi HAL) / Linux HCI HAL |
 | Keystore | QSEE KeyMint | non-secure KeyMint + Gatekeeper (no hardware-backed keys) |
@@ -32,6 +32,7 @@ group size, A/B with QTI's boot control HAL (ABL reads the GPT slot attributes),
 2. Copy `go7ml.xml` (this repo) to `.repo/local_manifests/go7ml.xml` (not together with the Go7 one: both
    list `hardware/onyx`). It adds:
    - `device/onyx/Go7ml` (this tree), `vendor/onyx/Go7ml` (firmware, see below)
+   - `vendor/onyx/mesa`: `go7-lineage/android_vendor_onyx_mesa` (GPU drivers)
    - `kernel/onyx/sm7225-6.18`: `go7-lineage/android_kernel_onyx_sm7225`, branch `lineage-24.0` (ACK
      `android17-6.18` at `cfe0897fec35` + the Go 7 commits, fragments in `arch/arm64/configs/vendor/onyx/`)
    - `hardware/onyx/eink` (`EinkShimTile`), `hardware/onyx/frontlight` (`frontlightd`)
