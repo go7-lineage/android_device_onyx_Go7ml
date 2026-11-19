@@ -84,9 +84,17 @@ on post-fs-data
     mkdir /data/vendor/wifi/wpa/sockets 0770 wifi wifi
     start tqftpserv
     start rmtfs
+    start vendor.go7ml-wlanaddr
 
 on shutdown
     stop rmtfs
+
+service vendor.go7ml-wlanaddr /vendor/bin/init.go7ml.wlanaddr.sh
+    user root
+    group root
+    capabilities NET_ADMIN
+    disabled
+    oneshot
 
 # First-boot aid: kernel log (init logs there too, printk.devkmsg=on) to the logdump partition every 10 s
 # for 10 min, readable from EDL with `edl r logdump`. Remove once the port boots reliably.

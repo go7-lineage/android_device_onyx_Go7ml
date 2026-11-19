@@ -80,7 +80,8 @@ PRODUCT_PACKAGES += \
     libwpa_client \
     wpa_supplicant \
     wpa_supplicant.conf \
-    wificond
+    wificond \
+    init.go7ml.wlanaddr.sh
 PRODUCT_VENDOR_PROPERTIES += \
     wifi.interface=wlan0
 PRODUCT_COPY_FILES += \

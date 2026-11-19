@@ -1,0 +1,7 @@
+# init.go7ml.wlanaddr.sh: sets wlan0's address from the serial number
+type go7ml_wlanaddr, domain;
+type go7ml_wlanaddr_exec, exec_type, vendor_file_type, file_type;
+init_daemon_domain(go7ml_wlanaddr)
+
+allow go7ml_wlanaddr vendor_shell_exec:file rx_file_perms;
+allow go7ml_wlanaddr vendor_toolbox_exec:file rx_file_perms;
