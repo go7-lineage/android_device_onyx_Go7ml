@@ -37,7 +37,8 @@ TARGET_KERNEL_CONFIG := \
     vendor/onyx/go7-android.config \
     vendor/onyx/go7-drivers.config \
     vendor/onyx/go7-eink.config \
-    vendor/onyx/go7-charger.config
+    vendor/onyx/go7-charger.config \
+    vendor/onyx/go7-audio.config
 # Lineage builds kernels with clang and LLVM=1 by default (vendor/lineage/config/BoardConfigKernel.mk).
 # Uncompressed like stock: the ABL path the stock kernel takes (ABL can also gunzip, untested here).
 BOARD_KERNEL_IMAGE_NAME := Image
