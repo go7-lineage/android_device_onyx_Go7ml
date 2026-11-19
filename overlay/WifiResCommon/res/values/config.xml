@@ -41,7 +41,7 @@
     <bool name="config_wifi_background_scan_support">true</bool>
 
     <!-- Indicates that connected MAC randomization is supported on this device -->
-    <bool name="config_wifi_connected_mac_randomization_supported">true</bool>
+    <bool name="config_wifi_connected_mac_randomization_supported">false</bool>
 
     <!-- Boolean indicating that only configurations that have the same pre-shared key will be linked -->
     <bool name="config_wifi_only_link_same_credential_configurations">false</bool>
