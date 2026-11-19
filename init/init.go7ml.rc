@@ -97,16 +97,6 @@ service vendor.go7ml-wlanaddr /vendor/bin/init.go7ml.wlanaddr.sh
     disabled
     oneshot
 
-# First-boot aid: kernel log (init logs there too, printk.devkmsg=on) to the logdump partition every 10 s
-# for 10 min, readable from EDL with `edl r logdump`. Remove once the port boots reliably.
-service vendor.go7ml-logdump /vendor/bin/init.go7ml.logdump.sh
-    class core
-    user root
-    group system
-    disabled
-    oneshot
-
 on init
-    start vendor.go7ml-logdump
     wait /dev/block/platform/soc@0/7c4000.mmc
     symlink /dev/block/platform/soc@0/7c4000.mmc /dev/block/bootdevice

@@ -18,12 +18,6 @@ prebuilt_etc {
 }
 
 sh_binary {
-    name: "init.go7ml.logdump.sh",
-    src: "init.go7ml.logdump.sh",
-    vendor: true,
-}
-
-sh_binary {
     name: "init.go7ml.drm.sh",
     src: "init.go7ml.drm.sh",
     vendor: true,

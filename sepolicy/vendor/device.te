@@ -1,4 +1,2 @@
 # onyx-epd /dev/ebc (stock SET_EBC_SEND_UPDATE)
 type ebc_device, dev_type;
-# the stock logdump partition, written by init.go7ml.logdump.sh
-type go7ml_logdump_block_device, dev_type;

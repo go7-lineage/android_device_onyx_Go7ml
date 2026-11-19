@@ -143,9 +143,8 @@ PRODUCT_VENDOR_PROPERTIES += \
 PRODUCT_COPY_FILES += \
     device/linaro/dragonboard/init.common.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.go7ml.usb.rc
 
-# Init, fstab, ueventd; init.go7ml.logdump.sh is a first-boot aid (kernel log to the logdump partition)
+# Init, fstab, ueventd
 PRODUCT_PACKAGES += \
-    init.go7ml.logdump.sh \
     fstab.go7ml \
     fstab.go7ml.ramdisk \
     init.go7ml.rc \
