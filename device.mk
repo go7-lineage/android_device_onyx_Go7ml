@@ -112,6 +112,10 @@ $(call soong_config_set_bool,lineage_health,charging_control_supports_toggle,fal
 $(call soong_config_set,lineage_health,charging_control_limit_start_path,/sys/class/power_supply/pm7250b-charger/charge_control_start_threshold)
 $(call soong_config_set,lineage_health,charging_control_limit_stop_path,/sys/class/power_supply/pm7250b-charger/charge_control_end_threshold)
 
+# Power button LED (red:status, blue:status)
+PRODUCT_PACKAGES += \
+    android.hardware.light-service.lineage
+
 PRODUCT_PACKAGES += \
     android.hardware.power-service.example
 
