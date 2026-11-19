@@ -21,6 +21,10 @@ on early-boot
     chown system system /sys/devices/virtual/sepdc/debug/ui_full
     chown system system /sys/devices/virtual/sepdc/debug/ui_a2cut
 
+    # frontlight (onyx,go7-frontlight): the composer drives it as the display's backlight
+    chown system system /sys/class/backlight/frontlight/brightness
+    chown system system /sys/class/backlight/frontlight/bl_power
+
     # charge limits (Lineage health)
     chown system system /sys/class/power_supply/pm7250b-charger/charge_control_start_threshold
     chown system system /sys/class/power_supply/pm7250b-charger/charge_control_end_threshold
@@ -38,6 +42,10 @@ on property:persist.vendor.eink_shim.full=*
 
 on property:persist.vendor.eink_shim.a2cut=*
     write /sys/devices/virtual/sepdc/debug/ui_a2cut ${persist.vendor.eink_shim.a2cut}
+
+# The QS warmth slider writes the property (0 = white only .. 32 = warm only)
+on property:persist.vendor.go7fl.ct=*
+    write /sys/class/backlight/frontlight/warmth ${persist.vendor.go7fl.ct}
 
 on fs
     mount_all --early
