@@ -5,3 +5,11 @@ init_daemon_domain(go7ml_wlanaddr)
 
 allow go7ml_wlanaddr vendor_shell_exec:file rx_file_perms;
 allow go7ml_wlanaddr vendor_toolbox_exec:file rx_file_perms;
+# androidboot.serialno
+allow go7ml_wlanaddr proc_cmdline:file r_file_perms;
+# waits for /sys/class/net/wlan0
+allow go7ml_wlanaddr sysfs_net:dir search;
+# ifconfig wlan0 hw ether
+allow go7ml_wlanaddr self:capability net_admin;
+allow go7ml_wlanaddr self:udp_socket create_socket_perms;
+allowxperm go7ml_wlanaddr self:udp_socket ioctl SIOCSIFHWADDR;
