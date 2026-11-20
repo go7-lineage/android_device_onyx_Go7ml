@@ -7,4 +7,5 @@ allow go7ml_drm_card vendor_shell_exec:file rx_file_perms;
 allow go7ml_drm_card vendor_toolbox_exec:file rx_file_perms;
 # /sys/class/drm/cardN/device/driver links
 r_dir_file(go7ml_drm_card, sysfs)
+r_dir_file(go7ml_drm_card, sysfs_gpu)
 set_prop(go7ml_drm_card, vendor_hwc_drm_prop)

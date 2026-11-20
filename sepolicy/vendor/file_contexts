@@ -16,6 +16,9 @@
 # the whole eMMC: the boot control HAL keeps the slot flags in the partition table
 /dev/block/mmcblk0                                                     u:object_r:root_block_device:s0
 
+# DRM cards: adreno, msm_dpu and onyx-epd, numbered in probe order (dragonboard labels card0 only)
+/dev/dri/card[0-9]+                              u:object_r:graphics_device:s0
+
 /vendor/bin/hw/android\.hardware\.boot-service\.qti    u:object_r:hal_bootctl_default_exec:s0
 /vendor/bin/init\.go7ml\.audio\.sh               u:object_r:go7ml_audio_exec:s0
 /vendor/bin/init\.go7ml\.drm\.sh                 u:object_r:go7ml_drm_card_exec:s0
