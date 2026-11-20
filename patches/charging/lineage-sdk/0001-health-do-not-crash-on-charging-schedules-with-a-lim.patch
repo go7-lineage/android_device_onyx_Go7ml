@@ -1,0 +1,42 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Go7 port <go7-port@example.invalid>
+Date: Fri, 20 Nov 2026 10:00:00 +0000
+Subject: [PATCH] health: do not crash on charging schedules with a limit-only
+ HAL
+
+With a HAL that supports only ChargingControlSupportedMode.LIMIT, the
+controller uses the Limit provider for the two schedule modes as well.
+Limit says it supports them but implements only the limit form of
+onBatteryChanged(), so the base class throws "Unsupported operation" in
+the system process: when a schedule is selected in Settings, and then at
+every start, because the mode is stored.
+
+Handle the schedule form: log it and charge without a limit.
+---
+ .../platform/internal/health/ccprovider/Limit.java     | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/lineage/lib/main/java/org/lineageos/platform/internal/health/ccprovider/Limit.java b/lineage/lib/main/java/org/lineageos/platform/internal/health/ccprovider/Limit.java
+index fdc98a4..b6b02d5 100644
+--- a/lineage/lib/main/java/org/lineageos/platform/internal/health/ccprovider/Limit.java
++++ b/lineage/lib/main/java/org/lineageos/platform/internal/health/ccprovider/Limit.java
+@@ -42,6 +42,16 @@ public class Limit extends ChargingControlProvider {
+         return setChargingLimit(targetPct);
+     }
+ 
++    @Override
++    protected boolean onBatteryChanged(float batteryPct, long startTime, long targetTime,
++            int configMode) {
++        // Schedules are not implemented on top of a charging limit: charge without one
++        // instead of letting the base class throw in the system process.
++        Log.w(TAG, "Charging schedules are not supported with a limit-only HAL");
++        setChargingLimit(100);
++        return false;
++    }
++
+     @Override
+     protected void onEnabled() {
+         onReset();
+-- 
+2.54.0
+
