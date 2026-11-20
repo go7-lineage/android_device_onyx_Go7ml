@@ -1,3 +1,4 @@
 /dev/ebc                                         u:object_r:ebc_device:s0
+/vendor/bin/init\.go7ml\.audio\.sh               u:object_r:go7ml_audio_exec:s0
 /vendor/bin/init\.go7ml\.drm\.sh                 u:object_r:go7ml_drm_card_exec:s0
 /vendor/bin/init\.go7ml\.wlanaddr\.sh            u:object_r:go7ml_wlanaddr_exec:s0

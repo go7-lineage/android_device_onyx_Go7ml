@@ -1,0 +1,7 @@
+# init.go7ml.audio.sh: starts the audio DSP, sets the speaker's mixer path
+type go7ml_audio, domain;
+type go7ml_audio_exec, exec_type, vendor_file_type, file_type;
+init_daemon_domain(go7ml_audio)
+
+allow go7ml_audio vendor_shell_exec:file rx_file_perms;
+allow go7ml_audio vendor_toolbox_exec:file rx_file_perms;

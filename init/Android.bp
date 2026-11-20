@@ -35,6 +35,12 @@ sh_binary {
     vendor: true,
 }
 
+sh_binary {
+    name: "init.go7ml.audio.sh",
+    src: "init.go7ml.audio.sh",
+    vendor: true,
+}
+
 prebuilt_etc {
     name: "ueventd.go7ml.rc",
     filename: "ueventd.rc",

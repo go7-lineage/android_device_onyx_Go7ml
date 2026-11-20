@@ -7,9 +7,18 @@ service vendor.go7ml-drm-card /vendor/bin/init.go7ml.drm.sh
     oneshot
     disabled
 
+# Internal speaker and microphones: audio DSP, sound card and mixer paths
+service vendor.go7ml-audio /vendor/bin/init.go7ml.audio.sh
+    user root
+    group root audio
+    oneshot
+    disabled
+
 on early-boot
     # before class hal (the composer) starts
     exec_start vendor.go7ml-drm-card
+    # before class hal (the audio HAL) starts; waits for the sound card
+    exec_start vendor.go7ml-audio
 
     # e-ink: /dev/ebc (full refreshes, ebcsend) and the onyx-epd UI policy settings (sepdc/debug)
     chown system system /dev/ebc

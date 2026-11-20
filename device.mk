@@ -120,14 +120,26 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.power-service.example
 
-# Audio: AOSP's default HAL (internal audio is groundwork only, kernel/mainline/battery-audio.md)
+# Audio: AOSP's default HAL on the kernel's sound card (speaker and the two digital microphones).
+# init.go7ml.audio.sh starts the audio DSP and sets the mixer paths at early-boot.
+# audio/audio_policy_configuration.xml is dragonboard's with the speaker on PCM device 1: the HAL reads its
+# ports from it.
 PRODUCT_PACKAGES += \
     com.android.hardware.audio \
+    init.go7ml.audio.sh \
     tinymix \
     tinyplay \
     tinycap
+# The HAL writes to ALSA in real time and keeps no reserve. With its default of 4 periods of a quarter buffer
+# the card runs empty between two writes. 8 periods of half a buffer (2048 frames, the kernel makes it 2400)
+# give 0.4 s of buffer, of which half is filled before playback starts. The same layout is used for
+# recording, where a period must stay below the HAL's buffer of 4096 frames: with periods of a whole buffer
+# the HAL's reads came up short and it filled in silence.
+PRODUCT_VENDOR_PROPERTIES += \
+    ro.hardware.audio.tinyalsa.period_count=8 \
+    ro.hardware.audio.tinyalsa.period_size_multiplier=4
 PRODUCT_COPY_FILES += \
-    device/linaro/dragonboard/etc/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
+    $(LOCAL_PATH)/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
     hardware/interfaces/audio/aidl/default/audio_effects_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects_config.xml \
     frameworks/av/services/audiopolicy/config/audio_policy_volumes.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_volumes.xml \
     frameworks/av/services/audiopolicy/config/bluetooth_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_audio_policy_configuration_7_0.xml \
