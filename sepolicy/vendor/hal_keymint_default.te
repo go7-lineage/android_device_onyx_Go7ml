@@ -1,0 +1,2 @@
+# The non-secure KeyMint reads ro.serialno for its attestation IDs
+get_prop(hal_keymint_default, serialno_prop)

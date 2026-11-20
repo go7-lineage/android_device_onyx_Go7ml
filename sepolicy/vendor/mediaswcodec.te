@@ -1,0 +1,2 @@
+# minigbm in the software codec process reads vendor.minigbm.debug
+get_prop(mediaswcodec, vendor_minigbm_debug_prop)
