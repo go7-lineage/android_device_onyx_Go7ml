@@ -1,4 +1,19 @@
 /dev/ebc                                         u:object_r:ebc_device:s0
+
+# eMMC partitions, named through the controller's by-name links (ueventd labels a node by its links).
+# Dragonboard's entries name its own UFS path. Firmware partitions stay unlabelled: nothing here writes them.
+/dev/block/platform/soc@0/7c4000\.mmc/by-name/boot_[ab]                u:object_r:boot_block_device:s0
+/dev/block/platform/soc@0/7c4000\.mmc/by-name/dtbo_[ab]                u:object_r:dtbo_block_device:s0
+/dev/block/platform/soc@0/7c4000\.mmc/by-name/recovery_[ab]            u:object_r:recovery_block_device:s0
+/dev/block/platform/soc@0/7c4000\.mmc/by-name/metadata                 u:object_r:metadata_block_device:s0
+/dev/block/platform/soc@0/7c4000\.mmc/by-name/misc                     u:object_r:misc_block_device:s0
+/dev/block/platform/soc@0/7c4000\.mmc/by-name/super                    u:object_r:super_block_device:s0
+/dev/block/platform/soc@0/7c4000\.mmc/by-name/userdata                 u:object_r:userdata_block_device:s0
+# the modem DSP's file system, served by rmtfs
+/dev/block/platform/soc@0/7c4000\.mmc/by-name/fsc                      u:object_r:modem_block_device:s0
+/dev/block/platform/soc@0/7c4000\.mmc/by-name/fsg                      u:object_r:modem_block_device:s0
+/dev/block/platform/soc@0/7c4000\.mmc/by-name/modemst[12]              u:object_r:modem_block_device:s0
+
 /vendor/bin/init\.go7ml\.audio\.sh               u:object_r:go7ml_audio_exec:s0
 /vendor/bin/init\.go7ml\.drm\.sh                 u:object_r:go7ml_drm_card_exec:s0
 /vendor/bin/init\.go7ml\.wlanaddr\.sh            u:object_r:go7ml_wlanaddr_exec:s0
