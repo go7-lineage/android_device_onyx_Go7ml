@@ -64,6 +64,8 @@ BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilts/dtbo-zero.img
 # No earlycon: nothing is wired to the debug UART and stock never initialises it.
 # msm.separate_gpu_kms: display without the GPU in the same DRM device (a GPU bind failure took the display
 # down with it on the device, 2026-11-05). TE: the DTS sets qcom,te-source = "none" (the TCON has no TE).
+# androidboot.serialconsole=0: no debug shell on the (null) console; while that shell runs, Android shows
+# "Serial console enabled".
 # First boots: SELinux permissive (eng builds honour it) so policy gaps show up as denials, not a dead boot.
 # Remove once the policy is complete.
 BOARD_KERNEL_CMDLINE := \
@@ -72,6 +74,7 @@ BOARD_KERNEL_CMDLINE := \
     msm.separate_gpu_kms=1 \
     androidboot.boot_devices=soc@0/7c4000.mmc \
     console=null \
+    androidboot.serialconsole=0 \
     firmware_class.path=/vendor/firmware \
     printk.devkmsg=on \
     deferred_probe_timeout=30 \
