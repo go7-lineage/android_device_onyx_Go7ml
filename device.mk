@@ -124,10 +124,12 @@ PRODUCT_PACKAGES += \
 # init.go7ml.audio.sh starts the audio DSP and sets the mixer paths at early-boot.
 # audio/audio_policy_configuration.xml is dragonboard's with the speaker on PCM device 1: the HAL reads its
 # ports from it.
+# tinymix.vendor is /vendor/bin/tinymix for that script: a vendor domain may not run /system/bin/tinymix.
 PRODUCT_PACKAGES += \
     com.android.hardware.audio \
     init.go7ml.audio.sh \
     tinymix \
+    tinymix.vendor \
     tinyplay \
     tinycap
 # The HAL writes to ALSA in real time and keeps no reserve. With its default of 4 periods of a quarter buffer

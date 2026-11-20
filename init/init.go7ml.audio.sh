@@ -15,7 +15,7 @@ while [ ! -e /dev/snd/controlC0 ] || [ ! -e /dev/snd/pcmC0D1p ]; do
     /vendor/bin/sleep 0.1
     i=$((i + 1))
 done
-m() { /system/bin/tinymix -D 0 "$1" "$2"; }
+m() { /vendor/bin/tinymix -D 0 "$1" "$2"; }
 m "RX_CODEC_DMA_RX_0 Audio Mixer MultiMedia2" 1
 m "RX_MACRO RX0 MUX" AIF1_PB
 m "RX INT2_1 MIX1 INP0" RX0

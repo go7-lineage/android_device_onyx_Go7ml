@@ -1,7 +1,14 @@
-# init.go7ml.audio.sh: starts the audio DSP, sets the speaker's mixer path
+# init.go7ml.audio.sh: starts the audio DSP, sets the mixer paths of speaker and microphones
 type go7ml_audio, domain;
 type go7ml_audio_exec, exec_type, vendor_file_type, file_type;
 init_daemon_domain(go7ml_audio)
 
 allow go7ml_audio vendor_shell_exec:file rx_file_perms;
 allow go7ml_audio vendor_toolbox_exec:file rx_file_perms;
+# /sys/class/remoteproc/remoteprocN/name and state
+r_dir_file(go7ml_audio, sysfs_remoteproc)
+allow go7ml_audio sysfs_remoteproc:file w_file_perms;
+# waits for the card's nodes, then /vendor/bin/tinymix sets the controls
+allow go7ml_audio audio_device:dir r_dir_perms;
+allow go7ml_audio audio_device:chr_file rw_file_perms;
+allow go7ml_audio vendor_file:file rx_file_perms;
