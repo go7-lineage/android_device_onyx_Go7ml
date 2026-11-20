@@ -1,0 +1,2 @@
+# init.rc: write /dev/sys/block/by-name/userdata/queue/discard_max_bytes (the eMMC's)
+allow init sysfs_devices_block:file w_file_perms;
