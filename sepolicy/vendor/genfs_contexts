@@ -7,6 +7,9 @@ genfscon sysfs /devices/platform/epd                                         u:o
 # Audio DSP (the modem's and the compute DSP's nodes are in dragonboard's list)
 genfscon sysfs /devices/platform/soc@0/3000000.remoteproc                   u:object_r:sysfs_remoteproc:s0
 
+# rmtfs reads the address of the modem's shared memory (dragonboard labels its boards' 88f00000)
+genfscon sysfs /devices/platform/efd01000.memory/rmtfs                      u:object_r:sysfs_rmtfs:s0
+
 # Dragonboard labels the whole PMIC tree (c440000.spmi/spmi-0) sysfs_wakeup. Battery, charger and LEDs:
 genfscon sysfs /devices/platform/soc@0/c440000.spmi/spmi-0/0-02/c440000.spmi:pmic@2:charger@1000/power_supply   u:object_r:sysfs_batteryinfo:s0
 genfscon sysfs /devices/platform/soc@0/c440000.spmi/spmi-0/0-02/c440000.spmi:pmic@2:battery@4800/power_supply   u:object_r:sysfs_batteryinfo:s0
