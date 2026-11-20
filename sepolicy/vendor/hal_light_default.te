@@ -1,2 +1,4 @@
 # red:status and blue:status hang below the PMIC tree, whose directories dragonboard labels sysfs_wakeup
 allow hal_light_default sysfs_wakeup:dir search;
+# it looks for a panel backlight in /sys/class/backlight (there is none for it: the composer has the frontlight)
+allow hal_light_default sysfs_frontlight:dir search;
