@@ -1,0 +1,14 @@
+# android.hardware.boot-service.qti keeps the slot flags in the eMMC's partition table: it lists the
+# by-name directory, looks at each partition's node and rewrites the table on the whole-disk node.
+allow hal_bootctl_default block_device:dir r_dir_perms;
+allow hal_bootctl_default {
+    block_device
+    boot_block_device
+    dtbo_block_device
+    metadata_block_device
+    modem_block_device
+    recovery_block_device
+    super_block_device
+    userdata_block_device
+}:blk_file getattr;
+allow hal_bootctl_default root_block_device:blk_file rw_file_perms;
