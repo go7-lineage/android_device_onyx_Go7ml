@@ -1,1 +1,4 @@
 get_prop(hal_graphics_composer_default, vendor_hwc_drm_prop)
+# The frontlight is the panel's backlight: /sys/class/backlight/frontlight/brightness and bl_power
+allow hal_graphics_composer_default sysfs_frontlight:dir r_dir_perms;
+allow hal_graphics_composer_default sysfs_frontlight:file rw_file_perms;
