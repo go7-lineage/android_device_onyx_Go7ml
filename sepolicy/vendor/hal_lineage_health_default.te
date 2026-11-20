@@ -1,0 +1,5 @@
+# Charge limit: charge_control_start_threshold and charge_control_end_threshold of pm7250b-charger,
+# below the PMIC tree, whose directories dragonboard labels sysfs_wakeup
+allow hal_lineage_health_default sysfs_wakeup:dir search;
+allow hal_lineage_health_default sysfs_batteryinfo:dir search;
+allow hal_lineage_health_default sysfs_batteryinfo:file rw_file_perms;

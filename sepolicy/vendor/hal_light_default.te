@@ -1,0 +1,2 @@
+# red:status and blue:status hang below the PMIC tree, whose directories dragonboard labels sysfs_wakeup
+allow hal_light_default sysfs_wakeup:dir search;

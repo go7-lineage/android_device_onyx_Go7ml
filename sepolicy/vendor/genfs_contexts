@@ -1,10 +1,15 @@
 genfscon sysfs /devices/virtual/sepdc/debug      u:object_r:sysfs_sepdc:s0
-# TODO after the first boot: label the charger/fuel-gauge power_supply nodes sysfs_batteryinfo for health
-# (paths under /devices/platform/soc@0/c440000.spmi/... depend on the final DT)
 
 # GPU and the e-paper panel's DRM device: every process that loads Mesa looks at the devices behind /dev/dri
 genfscon sysfs /devices/platform/soc@0/3d00000.gpu                          u:object_r:sysfs_gpu:s0
 genfscon sysfs /devices/platform/epd                                         u:object_r:sysfs_gpu:s0
 
+# Dragonboard labels the whole PMIC tree (c440000.spmi/spmi-0) sysfs_wakeup. Battery, charger and LEDs:
+genfscon sysfs /devices/platform/soc@0/c440000.spmi/spmi-0/0-02/c440000.spmi:pmic@2:charger@1000/power_supply   u:object_r:sysfs_batteryinfo:s0
+genfscon sysfs /devices/platform/soc@0/c440000.spmi/spmi-0/0-02/c440000.spmi:pmic@2:battery@4800/power_supply   u:object_r:sysfs_batteryinfo:s0
+genfscon sysfs /devices/platform/soc@0/c440000.spmi/spmi-0/0-05/c440000.spmi:pmic@5:pwm/leds                    u:object_r:sysfs_leds:s0
+
 # Wakeup sources outside the paths dragonboard labels (system_suspend reads their statistics)
 genfscon sysfs /devices/platform/epd/wakeup                                  u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/soc@0/c440000.spmi/spmi-0/0-02/c440000.spmi:pmic@2:charger@1000/power_supply/pm7250b-charger/wakeup   u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/soc@0/c440000.spmi/spmi-0/0-02/c440000.spmi:pmic@2:battery@4800/power_supply/qcom_qg/wakeup           u:object_r:sysfs_wakeup:s0
