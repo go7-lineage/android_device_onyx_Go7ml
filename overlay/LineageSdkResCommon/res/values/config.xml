@@ -7,4 +7,8 @@
     <!-- Bit field of lineage-sdk LightsCapabilities, without it the framework
          never drives the battery light. 64 = LIGHTS_BATTERY_LED -->
     <integer name="config_deviceLightCapabilities">64</integer>
+
+    <!-- 3 = limit: the only charging control mode the health HAL here can do
+         (the default is 1, a schedule) -->
+    <integer name="config_defaultChargingControlMode">3</integer>
 </resources>
