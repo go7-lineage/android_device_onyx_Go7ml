@@ -14,6 +14,10 @@ genfscon sysfs /devices/platform/soc@0/9c0000.geniqup/990000.i2c/i2c-2/2-0038/ba
 genfscon sysfs /class/backlight                                              u:object_r:sysfs_frontlight:s0
 
 # Wakeup sources outside the paths dragonboard labels (system_suspend reads their statistics)
+genfscon sysfs /devices/platform/soc@0/4080000.remoteproc/wakeup            u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/soc@0/18800000.wifi/wakeup                 u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/epd/wakeup                                  u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/gpio-keys/wakeup                            u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/hall-sensor/wakeup                          u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/soc@0/c440000.spmi/spmi-0/0-02/c440000.spmi:pmic@2:charger@1000/power_supply/pm7250b-charger/wakeup   u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/soc@0/c440000.spmi/spmi-0/0-02/c440000.spmi:pmic@2:battery@4800/power_supply/qcom_qg/wakeup           u:object_r:sysfs_wakeup:s0
