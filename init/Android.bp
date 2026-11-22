@@ -17,6 +17,13 @@ prebuilt_etc {
     vendor: true,
 }
 
+prebuilt_etc {
+    name: "init.go7ml.usb.rc",
+    src: "init.go7ml.usb.rc",
+    sub_dir: "init",
+    vendor: true,
+}
+
 sh_binary {
     name: "init.go7ml.drm.sh",
     src: "init.go7ml.drm.sh",

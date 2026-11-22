@@ -156,15 +156,13 @@ PRODUCT_COPY_FILES += \
 PRODUCT_VENDOR_PROPERTIES += \
     media.c2.hal.selection=aidl
 
-# USB gadget (configfs: adb, MTP), dragonboard's rc; init.go7ml.rc sets vendor.usb.controller=a600000.usb
-PRODUCT_COPY_FILES += \
-    device/linaro/dragonboard/init.common.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.go7ml.usb.rc
-
-# Init, fstab, ueventd
+# Init, fstab, ueventd. init.go7ml.usb.rc (configfs gadget: adb, MTP) is dragonboard's init.common.usb.rc with
+# the USB strings from ro.product.*; init.go7ml.rc sets vendor.usb.controller=a600000.usb
 PRODUCT_PACKAGES += \
     fstab.go7ml \
     fstab.go7ml.ramdisk \
     init.go7ml.rc \
+    init.go7ml.usb.rc \
     ueventd.go7ml.rc
 
 # Keys: gpio-keys (page keys), onyx-go7-hall (KEY_POWER/KEY_WAKEUP, as stock) use Generic.kl
