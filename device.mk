@@ -165,7 +165,7 @@ PRODUCT_PACKAGES += \
     init.go7ml.usb.rc \
     ueventd.go7ml.rc
 
-# Keys: gpio-keys (page keys), onyx-go7-hall (KEY_POWER/KEY_WAKEUP, as stock) use Generic.kl
+# Keys: gpio-keys (page keys), onyx-go7-hall (KEY_SLEEP/KEY_WAKEUP) use Generic.kl
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml
 
