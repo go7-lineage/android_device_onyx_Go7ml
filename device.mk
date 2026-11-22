@@ -164,6 +164,8 @@ PRODUCT_PACKAGES += \
     init.go7ml.rc \
     init.go7ml.usb.rc \
     ueventd.go7ml.rc
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.usb.accessory.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.accessory.xml
 
 # Keys: gpio-keys (page keys), onyx-go7-hall (KEY_SLEEP/KEY_WAKEUP) use Generic.kl
 PRODUCT_COPY_FILES += \
