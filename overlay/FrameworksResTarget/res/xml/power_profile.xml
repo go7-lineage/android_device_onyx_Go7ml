@@ -7,9 +7,7 @@
     <!-- Battery, screen, Wi-Fi, Bluetooth, audio, video and memory values
          match stock (Onyx firmware 4.2).
 
-         CPU frequency steps and cpu.core_power.* are measured on the Go 7.
-
-         TODO: bluetooth.controller.* values are still FP4's -->
+         CPU frequency steps and cpu.core_power.* are measured on the Go 7. -->
     <item name="none">0</item>
     <item name="screen.on.display0">46</item>
     <item name="screen.full.display0">350</item>
