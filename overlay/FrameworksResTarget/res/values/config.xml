@@ -25,4 +25,8 @@
     <bool name="config_dreamsSupported">false</bool>
 
     <integer name="def_accessibility_text_cursor_blink_interval_ms">0</integer>
+
+    <string-array name="theming_defaults" translatable="false">
+        <item>*|MONOCHROMATIC|home_wallpaper</item>
+    </string-array>
 </resources>
