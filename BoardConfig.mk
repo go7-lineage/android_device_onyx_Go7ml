@@ -42,6 +42,12 @@ TARGET_KERNEL_CONFIG := \
 # Lineage builds kernels with clang and LLVM=1 by default (vendor/lineage/config/BoardConfigKernel.mk).
 # Uncompressed like stock: the ABL path the stock kernel takes (ABL can also gunzip, untested here).
 BOARD_KERNEL_IMAGE_NAME := Image
+TARGET_KERNEL_EXT_MODULE_ROOT := hardware/onyx/eink
+TARGET_KERNEL_EXT_MODULES := kernel:kbuild
+BOOT_KERNEL_MODULES := onyx-go7-tcon.ko panel-onyx-go7-eink.ko onyx-epd.ko
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := $(BOOT_KERNEL_MODULES)
+RECOVERY_KERNEL_MODULES := $(BOOT_KERNEL_MODULES)
+BOARD_RECOVERY_KERNEL_MODULES_LOAD := $(BOOT_KERNEL_MODULES)
 
 # Boot image as stock's: header v2, kernel + ramdisk + our single DTB (built with -@, see
 # kernel/mainline/README.md "Boot image rules": Onyx's ABL always applies the DTBO)
