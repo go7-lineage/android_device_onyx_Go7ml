@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Apply port patches to a LineageOS 24.0 tree, safe to re-run
-# usage: apply.sh [topic ...]   (default: frontlight eink charging)
+# usage: apply.sh [topic ...]   (default: frontlight eink charging audio)
 set -euo pipefail
 
 PATCHES_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -10,11 +10,13 @@ declare -A PROJECTS=(
     [packages_frameworks_base]=frameworks/base
     [system_sepolicy]=system/sepolicy
     [lineage-sdk]=lineage-sdk
+    [external_tinyalsa_new]=external/tinyalsa_new
 )
 ORDER_frontlight=(packages_frameworks_base system_sepolicy)
 # eink's sepolicy patch applies on top of frontlight's, keep it after
 ORDER_eink=(packages_frameworks_base system_sepolicy)
 ORDER_charging=(lineage-sdk)
+ORDER_audio=(external_tinyalsa_new)
 
 die() { printf '\n*** ERROR: %s\n' "$*" >&2; exit 1; }
 
@@ -28,7 +30,7 @@ fi
 
 TOPICS=("$@")
 if (( ${#TOPICS[@]} == 0 )); then
-    TOPICS=(frontlight eink charging)
+    TOPICS=(frontlight eink charging audio)
 fi
 
 for topic in "${TOPICS[@]}"; do
