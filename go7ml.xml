@@ -5,6 +5,8 @@
   <project name="go7-lineage/android_vendor_onyx_mesa" path="vendor/onyx/mesa" remote="github" revision="master" />
   <project name="go7-lineage/android_kernel_onyx_sm7225" path="kernel/onyx/sm7225-6.18" remote="github" revision="lineage-24.0" clone-depth="1" />
   <project name="go7-lineage/eink-shim" path="hardware/onyx/eink" remote="github" revision="master" />
+  <project name="go7-lineage/android_vendor_onyx_sensors" path="vendor/onyx/sensors" remote="github" revision="master" />
+  <project name="linux-msm/hexagonrpc" path="external/hexagonrpc" remote="github" revision="refs/tags/v0.5.0" />
 
   <!-- graphics makefiles/sepolicy (drm_hwcomposer, minigbm_msm), qrtr/pd-mapper/rmtfs/tqftpserv -->
   <project name="device/linaro/dragonboard" path="device/linaro/dragonboard" remote="aosp" />

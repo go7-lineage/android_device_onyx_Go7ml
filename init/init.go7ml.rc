@@ -57,6 +57,7 @@ on property:persist.vendor.go7fl.ct=*
     write /sys/class/backlight/frontlight/warmth ${persist.vendor.go7fl.ct}
 
 on fs
+    mkdir /mnt/vendor/persist 0771 root system
     mount_all --early
     swapon_all
 

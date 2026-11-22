@@ -74,6 +74,9 @@ PRODUCT_PACKAGES += \
     rmtfs \
     tqftpserv
 
+PRODUCT_PACKAGES += \
+    onyx-sensors
+
 # Wi-Fi (ath10k-snoc, no vendor Wi-Fi HAL, as db845c)
 PRODUCT_PACKAGES += \
     hostapd \

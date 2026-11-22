@@ -124,7 +124,8 @@ BOARD_HAVE_BLUETOOTH := true
 # SEPolicy: dragonboard's (qrtr, rmtfs, pd-mapper, tqftpserv, drm_hwcomposer, ...) + ours
 BOARD_VENDOR_SEPOLICY_DIRS += \
     device/linaro/dragonboard/sepolicy \
-    $(DEVICE_PATH)/sepolicy/vendor
+    $(DEVICE_PATH)/sepolicy/vendor \
+    vendor/onyx/sensors/sepolicy
 
 DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/manifest.xml
 

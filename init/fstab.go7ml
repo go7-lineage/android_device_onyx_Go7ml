@@ -5,6 +5,7 @@ system_ext                                      /system_ext   erofs   ro        
 product                                         /product      erofs   ro                                           wait,slotselect,avb=vbmeta_system,logical,first_stage_mount
 vendor                                          /vendor       erofs   ro                                           wait,slotselect,avb=vbmeta,logical,first_stage_mount
 /dev/block/by-name/metadata                     /metadata     ext4    noatime,nosuid,nodev,discard                 wait,check,formattable,first_stage_mount
+/dev/block/by-name/persist                      /mnt/vendor/persist ext4    ro,noatime,nosuid,nodev                      wait
 # no inline crypto engine driver for the eMMC on 6.18 [?]: software FBE (no inlinecrypt)
 /dev/block/by-name/userdata                     /data         f2fs    noatime,nosuid,nodev,discard,reserve_root=32768,resgid=1065  latemount,wait,check,formattable,quota,reservedsize=128M,fileencryption=aes-256-xts:aes-256-cts:v2,keydirectory=/metadata/vold/metadata_encryption,checkpoint=fs
 /dev/block/by-name/misc                         /misc         emmc    defaults                                     defaults
