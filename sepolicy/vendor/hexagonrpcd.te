@@ -1,0 +1,1 @@
+allow hexagonrpcd sysfs_dt_compatible:file r_file_perms;
