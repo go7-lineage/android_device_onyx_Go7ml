@@ -26,6 +26,7 @@ genfscon sysfs /devices/platform/soc@0/7c4000.mmc/mmc_host/mmc0/mmc0:0001/block/
 genfscon sysfs /devices/platform/soc@0/3000000.remoteproc/wakeup            u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/soc@0/4080000.remoteproc/wakeup            u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/soc@0/18800000.wifi/wakeup                 u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/soc@0/a6f8800.usb/a600000.usb/gadget.0/wakeup   u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/epd/wakeup                                  u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/gpio-keys/wakeup                            u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/hall-sensor/wakeup                          u:object_r:sysfs_wakeup:s0
