@@ -45,10 +45,10 @@ BOARD_KERNEL_IMAGE_NAME := Image
 TARGET_KERNEL_EXT_MODULE_ROOT := hardware/onyx/eink
 TARGET_KERNEL_EXT_MODULES := kernel:kbuild
 TARGET_KERNEL_ADDITIONAL_FLAGS := MO=$(abspath $(PRODUCT_OUT))/obj/KERNEL_EXT_OBJ
-BOOT_KERNEL_MODULES := onyx-go7-tcon.ko panel-onyx-go7-eink.ko onyx-epd.ko
-BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := $(BOOT_KERNEL_MODULES)
-RECOVERY_KERNEL_MODULES := $(BOOT_KERNEL_MODULES)
-BOARD_RECOVERY_KERNEL_MODULES_LOAD := $(BOOT_KERNEL_MODULES)
+EINK_KERNEL_MODULES := onyx-go7-tcon.ko panel-onyx-go7-eink.ko onyx-epd.ko
+BOARD_VENDOR_KERNEL_MODULES_LOAD := $(EINK_KERNEL_MODULES)
+RECOVERY_KERNEL_MODULES := $(EINK_KERNEL_MODULES)
+BOARD_RECOVERY_KERNEL_MODULES_LOAD := $(EINK_KERNEL_MODULES)
 
 # Boot image as stock's: header v2, kernel + ramdisk + our single DTB (built with -@, see
 # kernel/mainline/README.md "Boot image rules": Onyx's ABL always applies the DTBO)

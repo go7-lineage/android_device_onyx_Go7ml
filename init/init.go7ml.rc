@@ -14,6 +14,9 @@ service vendor.go7ml-audio /vendor/bin/init.go7ml.audio.sh
     oneshot
     disabled
 
+on early-init
+    exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules --all=/vendor/lib/modules/modules.load
+
 on early-boot
     # before class hal (the composer) starts
     exec_start vendor.go7ml-drm-card
