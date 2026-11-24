@@ -32,6 +32,8 @@ on early-boot
     chown system system /sys/devices/virtual/sepdc/debug/ui_gc
     chown system system /sys/devices/virtual/sepdc/debug/ui_full
     chown system system /sys/devices/virtual/sepdc/debug/ui_a2cut
+    chown system system /sys/devices/virtual/sepdc/debug/ui_gamma
+    chown system system /sys/devices/virtual/sepdc/debug/ui_levels
 
     # frontlight (onyx,go7-frontlight): the composer drives it as the display's backlight
     chown system system /sys/class/backlight/frontlight/brightness
@@ -54,6 +56,12 @@ on property:persist.vendor.eink_shim.full=*
 
 on property:persist.vendor.eink_shim.a2cut=*
     write /sys/devices/virtual/sepdc/debug/ui_a2cut ${persist.vendor.eink_shim.a2cut}
+
+on property:persist.vendor.eink_shim.gamma=*
+    write /sys/devices/virtual/sepdc/debug/ui_gamma ${persist.vendor.eink_shim.gamma}
+
+on property:persist.vendor.eink_shim.levels=*
+    write /sys/devices/virtual/sepdc/debug/ui_levels ${persist.vendor.eink_shim.levels}
 
 # The QS warmth slider writes the property (0 = white only .. 32 = warm only)
 on property:persist.vendor.go7fl.ct=*
