@@ -62,9 +62,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_PRODUCT_PROPERTIES += \
     ro.sf.lcd_density=300
 
-# E-ink: QS tile (writes persist.vendor.eink_shim.*, mapped to the driver in init.go7ml.rc)
+# E-ink: settings app and QS tiles (write persist.vendor.eink_shim.*, mapped to the driver in init.go7ml.rc)
 PRODUCT_PACKAGES += \
-    EinkShimTile
+    EinkSettings
 
 # Remoteprocs (the modem DSP runs Wi-Fi): rmtfs, tqftpserv from dragonboard, started in init.go7ml.rc.
 # The kernel does PD mapping (CONFIG_QCOM_PD_MAPPER) and the QRTR name service, so no pd-mapper/qrtr-ns;
