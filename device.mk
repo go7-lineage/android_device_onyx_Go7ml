@@ -64,7 +64,8 @@ PRODUCT_PRODUCT_PROPERTIES += \
 
 # E-ink: settings app and QS tiles (write persist.vendor.eink_shim.*, mapped to the driver in init.go7ml.rc)
 PRODUCT_PACKAGES += \
-    EinkSettings
+    EinkSettings \
+    eink_sleep.gray
 
 # Remoteprocs (the modem DSP runs Wi-Fi): rmtfs, tqftpserv from dragonboard, started in init.go7ml.rc.
 # The kernel does PD mapping (CONFIG_QCOM_PD_MAPPER) and the QRTR name service, so no pd-mapper/qrtr-ns;
