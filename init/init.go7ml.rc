@@ -34,6 +34,7 @@ on early-boot
     chown system system /sys/devices/virtual/sepdc/debug/ui_a2cut
     chown system system /sys/devices/virtual/sepdc/debug/ui_gamma
     chown system system /sys/devices/virtual/sepdc/debug/ui_levels
+    chown system system /sys/devices/virtual/sepdc/debug/ui_flash
 
     # frontlight (onyx,go7-frontlight): the composer drives it as the display's backlight
     chown system system /sys/class/backlight/frontlight/brightness
