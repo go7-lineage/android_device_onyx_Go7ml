@@ -76,6 +76,8 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
     onyx-sensors
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.accelerometer.xml
 
 # Wi-Fi (ath10k-snoc, no vendor Wi-Fi HAL, as db845c)
 PRODUCT_PACKAGES += \
