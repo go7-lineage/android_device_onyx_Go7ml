@@ -1,0 +1,340 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Go7 port <go7-port@example.invalid>
+Date: Thu, 26 Nov 2026 20:00:00 +0000
+Subject: [PATCH] Add Onyx's DeviceController for frontlight apps
+
+KOReader and other apps written for Onyx's firmware set the frontlight
+by reflecting static methods of android.onyx.hardware.DeviceController.
+The Go 7 runs them in CTM mode: brightness is light type 7, warmth type
+6, and type 4 switches the light. The class keeps stock's signatures and
+fallbacks and calls a small system_server service, frontlight.
+
+The service sets the brightness through DisplayManager, like the QS
+slider, so Android keeps it and the slider follows; off is brightness 0.
+Levels 0-32 map to brightness through the composer's HLG curve, measured
+on the device: level = floor(32 * HLG(brightness)). Warmth goes through
+persist.vendor.go7fl.ct, which init applies, like the QS warmth slider.
+The service type comes with the matching system/sepolicy patch.
+---
+ .../onyx/hardware/DeviceController.java       | 117 ++++++++++++++++++
+ .../android/onyx/hardware/IFrontlight.aidl    |   9 ++
+ .../server/frontlight/FrontlightLevels.java   |  40 ++++++
+ .../server/frontlight/FrontlightService.java  |  98 +++++++++++++++
+ .../java/com/android/server/SystemServer.java |   5 +
+ 5 files changed, 269 insertions(+)
+ create mode 100644 core/java/android/onyx/hardware/DeviceController.java
+ create mode 100644 core/java/android/onyx/hardware/IFrontlight.aidl
+ create mode 100644 services/core/java/com/android/server/frontlight/FrontlightLevels.java
+ create mode 100644 services/core/java/com/android/server/frontlight/FrontlightService.java
+
+diff --git a/core/java/android/onyx/hardware/DeviceController.java b/core/java/android/onyx/hardware/DeviceController.java
+new file mode 100644
+index 000000000..1a89a5dab
+--- /dev/null
++++ b/core/java/android/onyx/hardware/DeviceController.java
+@@ -0,0 +1,117 @@
++package android.onyx.hardware;
++
++import android.compat.annotation.UnsupportedAppUsage;
++import android.content.Context;
++import android.os.IBinder;
++import android.os.RemoteException;
++import android.os.ServiceManager;
++
++/** @hide */
++public final class DeviceController {
++    private static final String SERVICE = "frontlight";
++    private static final int LIGHT_TYPE_CTM_ALL = 4;
++    private static final int LIGHT_TYPE_CTM_TEMPERATURE = 6;
++    private static final int LIGHT_TYPE_CTM_BRIGHTNESS = 7;
++    private static final int MAX_LEVEL = 32;
++
++    private static IFrontlight sService;
++
++    private DeviceController() {
++    }
++
++    @UnsupportedAppUsage
++    public static int getLightValue(int type) {
++        return isLevelType(type) ? read(type) : 0;
++    }
++
++    @UnsupportedAppUsage
++    public static int getMaxLightValue(int type) {
++        return isLevelType(type) && service() != null ? MAX_LEVEL : 0;
++    }
++
++    @UnsupportedAppUsage
++    public static void setLightValue(int type, int value) {
++        if (isLevelType(type) && value >= 0 && value <= MAX_LEVEL) {
++            write(type, value);
++        }
++    }
++
++    @UnsupportedAppUsage
++    public static boolean closeFrontLight(int type) {
++        return type == LIGHT_TYPE_CTM_ALL && write(LIGHT_TYPE_CTM_BRIGHTNESS, 0);
++    }
++
++    @UnsupportedAppUsage
++    public static boolean openFrontLight(int type) {
++        return type == LIGHT_TYPE_CTM_ALL && service() != null;
++    }
++
++    @UnsupportedAppUsage
++    public static boolean isLightOn(int type) {
++        return type == LIGHT_TYPE_CTM_ALL && read(LIGHT_TYPE_CTM_BRIGHTNESS) > 0;
++    }
++
++    @UnsupportedAppUsage
++    public static boolean checkCTM() {
++        return true;
++    }
++
++    @UnsupportedAppUsage
++    public static boolean hasCTMBrightness(Context context) {
++        return true;
++    }
++
++    @UnsupportedAppUsage
++    public static boolean hasFLBrightness(Context context) {
++        return false;
++    }
++
++    private static boolean isLevelType(int type) {
++        return type == LIGHT_TYPE_CTM_BRIGHTNESS || type == LIGHT_TYPE_CTM_TEMPERATURE;
++    }
++
++    private static int read(int type) {
++        IFrontlight service = service();
++        if (service == null) {
++            return -1;
++        }
++        try {
++            return type == LIGHT_TYPE_CTM_TEMPERATURE ? service.getWarmth() : service.getBrightness();
++        } catch (RemoteException e) {
++            forget();
++            return -1;
++        }
++    }
++
++    private static boolean write(int type, int level) {
++        IFrontlight service = service();
++        if (service == null) {
++            return false;
++        }
++        try {
++            if (type == LIGHT_TYPE_CTM_TEMPERATURE) {
++                service.setWarmth(level);
++            } else {
++                service.setBrightness(level);
++            }
++            return true;
++        } catch (RemoteException e) {
++            forget();
++            return false;
++        }
++    }
++
++    private static synchronized IFrontlight service() {
++        if (sService == null) {
++            IBinder binder = ServiceManager.checkService(SERVICE);
++            if (binder != null) {
++                sService = IFrontlight.Stub.asInterface(binder);
++            }
++        }
++        return sService;
++    }
++
++    private static synchronized void forget() {
++        sService = null;
++    }
++}
+diff --git a/core/java/android/onyx/hardware/IFrontlight.aidl b/core/java/android/onyx/hardware/IFrontlight.aidl
+new file mode 100644
+index 000000000..4d3b0de88
+--- /dev/null
++++ b/core/java/android/onyx/hardware/IFrontlight.aidl
+@@ -0,0 +1,9 @@
++package android.onyx.hardware;
++
++/** @hide */
++interface IFrontlight {
++    int getBrightness();
++    void setBrightness(int level);
++    int getWarmth();
++    void setWarmth(int level);
++}
+diff --git a/services/core/java/com/android/server/frontlight/FrontlightLevels.java b/services/core/java/com/android/server/frontlight/FrontlightLevels.java
+new file mode 100644
+index 000000000..c9f51a31c
+--- /dev/null
++++ b/services/core/java/com/android/server/frontlight/FrontlightLevels.java
+@@ -0,0 +1,40 @@
++package com.android.server.frontlight;
++
++final class FrontlightLevels {
++    static final int MAX_LEVEL = 32;
++
++    private static final double HLG_A = 0.17883277;
++    private static final double HLG_B = 0.28466892;
++    private static final double HLG_C = 0.55991073;
++
++    private FrontlightLevels() {
++    }
++
++    static float toBrightness(int level) {
++        if (level <= 0) {
++            return 0f;
++        }
++        if (level >= MAX_LEVEL) {
++            return 1f;
++        }
++        return (float) hlgInverse((level + 0.5) / MAX_LEVEL);
++    }
++
++    static int toLevel(float brightness) {
++        if (brightness <= 0f) {
++            return 0;
++        }
++        if (brightness >= 1f) {
++            return MAX_LEVEL;
++        }
++        return Math.min(MAX_LEVEL, (int) Math.floor(MAX_LEVEL * hlg(brightness)));
++    }
++
++    private static double hlg(double e) {
++        return e <= 1.0 / 12 ? Math.sqrt(3 * e) : HLG_A * Math.log(12 * e - HLG_B) + HLG_C;
++    }
++
++    private static double hlgInverse(double v) {
++        return v <= 0.5 ? v * v / 3 : (Math.exp((v - HLG_C) / HLG_A) + HLG_B) / 12;
++    }
++}
+diff --git a/services/core/java/com/android/server/frontlight/FrontlightService.java b/services/core/java/com/android/server/frontlight/FrontlightService.java
+new file mode 100644
+index 000000000..b094f0036
+--- /dev/null
++++ b/services/core/java/com/android/server/frontlight/FrontlightService.java
+@@ -0,0 +1,98 @@
++package com.android.server.frontlight;
++
++import android.content.Context;
++import android.hardware.display.DisplayManager;
++import android.onyx.hardware.IFrontlight;
++import android.os.Binder;
++import android.os.SystemProperties;
++import android.util.Slog;
++import android.view.Display;
++
++import com.android.server.SystemService;
++
++public final class FrontlightService extends SystemService {
++    private static final String TAG = "FrontlightService";
++    private static final String SERVICE = "frontlight";
++    private static final String WARMTH_PROP = "persist.vendor.go7fl.ct";
++
++    private boolean mWarned;
++
++    public FrontlightService(Context context) {
++        super(context);
++    }
++
++    @Override
++    public void onStart() {
++        publishBinderService(SERVICE, new IFrontlight.Stub() {
++            @Override
++            public int getBrightness() {
++                return readBrightness();
++            }
++
++            @Override
++            public void setBrightness(int level) {
++                writeBrightness(level);
++            }
++
++            @Override
++            public int getWarmth() {
++                int level = SystemProperties.getInt(WARMTH_PROP, 0);
++                return Math.max(0, Math.min(FrontlightLevels.MAX_LEVEL, level));
++            }
++
++            @Override
++            public void setWarmth(int level) {
++                writeWarmth(level);
++            }
++        });
++    }
++
++    private int readBrightness() {
++        final long token = Binder.clearCallingIdentity();
++        try {
++            return FrontlightLevels.toLevel(displayManager().getBrightness(Display.DEFAULT_DISPLAY));
++        } catch (RuntimeException e) {
++            warn("cannot read the brightness", e);
++            return 0;
++        } finally {
++            Binder.restoreCallingIdentity(token);
++        }
++    }
++
++    private void writeBrightness(int level) {
++        if (level < 0 || level > FrontlightLevels.MAX_LEVEL) {
++            return;
++        }
++        final long token = Binder.clearCallingIdentity();
++        try {
++            displayManager().setBrightness(Display.DEFAULT_DISPLAY,
++                    FrontlightLevels.toBrightness(level));
++        } catch (RuntimeException e) {
++            warn("cannot set the brightness", e);
++        } finally {
++            Binder.restoreCallingIdentity(token);
++        }
++    }
++
++    private void writeWarmth(int level) {
++        if (level < 0 || level > FrontlightLevels.MAX_LEVEL) {
++            return;
++        }
++        try {
++            SystemProperties.set(WARMTH_PROP, Integer.toString(level));
++        } catch (RuntimeException e) {
++            warn("cannot set " + WARMTH_PROP, e);
++        }
++    }
++
++    private DisplayManager displayManager() {
++        return getContext().getSystemService(DisplayManager.class);
++    }
++
++    private synchronized void warn(String what, RuntimeException e) {
++        if (!mWarned) {
++            mWarned = true;
++            Slog.w(TAG, what, e);
++        }
++    }
++}
+diff --git a/services/java/com/android/server/SystemServer.java b/services/java/com/android/server/SystemServer.java
+index 4bb406fc5..be1b65e84 100644
+--- a/services/java/com/android/server/SystemServer.java
++++ b/services/java/com/android/server/SystemServer.java
+@@ -181,6 +181,7 @@ import com.android.server.dreams.DreamManagerService;
+ import com.android.server.emergency.EmergencyAffordanceService;
+ import com.android.server.files.FileService;
+ import com.android.server.flags.FeatureFlagsService;
++import com.android.server.frontlight.FrontlightService;
+ import com.android.server.gpu.GpuService;
+ import com.android.server.grammaticalinflection.GrammaticalInflectionService;
+ import com.android.server.graphics.fonts.FontManagerService;
+@@ -2674,6 +2675,10 @@ public final class SystemServer implements Dumpable {
+             mSystemServiceManager.startService(DreamManagerService.class);
+             t.traceEnd();
+ 
++            t.traceBegin("StartFrontlightService");
++            mSystemServiceManager.startService(FrontlightService.class);
++            t.traceEnd();
++
+             t.traceBegin("AddGraphicsStatsService");
+             ServiceManager.addService(GraphicsStatsService.GRAPHICS_STATS_SERVICE,
+                     new GraphicsStatsService(context));
