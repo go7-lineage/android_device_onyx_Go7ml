@@ -63,6 +63,7 @@ PRODUCT_PRODUCT_PROPERTIES += \
 # E-ink: settings app and QS tiles (write persist.vendor.eink_shim.*, mapped to the driver in init.eink_shim.rc)
 PRODUCT_PACKAGES += \
     EinkSettings \
+    eink_poweroff.gray \
     eink_sleep.gray \
     init.eink_shim.drm.sh \
     init.eink_shim.rc
