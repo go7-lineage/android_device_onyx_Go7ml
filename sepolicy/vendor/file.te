@@ -1,5 +1,2 @@
-# onyx-epd settings and status (/sys/devices/virtual/sepdc/debug: cut_frame_num, ui_*, status)
-type sysfs_sepdc, sysfs_type, fs_type;
-type sysfs_sepdc_flash, sysfs_type, fs_type;
 # Frontlight (onyx,go7-frontlight): brightness and bl_power (the composer), warmth (init.go7ml.rc)
 type sysfs_frontlight, sysfs_type, fs_type;

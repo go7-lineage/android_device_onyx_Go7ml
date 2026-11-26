@@ -54,18 +54,18 @@ $(call inherit-product, vendor/onyx/mesa/mesa.mk)
 PRODUCT_VENDOR_PROPERTIES += \
     vendor.minigbm.debug=nocompression
 
-# The composer uses only the onyx-epd card; init.go7ml.drm.sh sets vendor.hwc.drm.device to it at early-boot
+# The composer uses only the onyx-epd card; init.eink_shim.drm.sh sets vendor.hwc.drm.device to it at early-boot
 # (with msm.separate_gpu_kms=1 there are three cards: adreno, msm = the e-ink DSI link driven by the kernel's
 # own client, onyx-epd). The refresh policy runs in onyx-epd (ui_* in sepdc/debug); no composer patch.
-PRODUCT_PACKAGES += \
-    init.go7ml.drm.sh
 PRODUCT_PRODUCT_PROPERTIES += \
     ro.sf.lcd_density=300
 
-# E-ink: settings app and QS tiles (write persist.vendor.eink_shim.*, mapped to the driver in init.go7ml.rc)
+# E-ink: settings app and QS tiles (write persist.vendor.eink_shim.*, mapped to the driver in init.eink_shim.rc)
 PRODUCT_PACKAGES += \
     EinkSettings \
-    eink_sleep.gray
+    eink_sleep.gray \
+    init.eink_shim.drm.sh \
+    init.eink_shim.rc
 
 # Remoteprocs (the modem DSP runs Wi-Fi): rmtfs, tqftpserv from dragonboard, started in init.go7ml.rc.
 # The kernel does PD mapping (CONFIG_QCOM_PD_MAPPER) and the QRTR name service, so no pd-mapper/qrtr-ns;

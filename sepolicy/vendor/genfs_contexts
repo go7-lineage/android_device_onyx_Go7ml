@@ -1,6 +1,3 @@
-genfscon sysfs /devices/virtual/sepdc/debug      u:object_r:sysfs_sepdc:s0
-genfscon sysfs /devices/virtual/sepdc/debug/ui_flash   u:object_r:sysfs_sepdc_flash:s0
-
 # GPU and the e-paper panel's DRM device: every process that loads Mesa looks at the devices behind /dev/dri
 genfscon sysfs /devices/platform/soc@0/3d00000.gpu                          u:object_r:sysfs_gpu:s0
 genfscon sysfs /devices/platform/epd                                         u:object_r:sysfs_gpu:s0

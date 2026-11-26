@@ -22,6 +22,10 @@ die() { printf '\n*** ERROR: %s\n' "$*" >&2; exit 1; }
 
 [[ -d .repo && -f build/envsetup.sh ]] || die "run this from the root of the Lineage source tree"
 
+declare -A TOPIC_DIRS=(
+    [eink]="$PWD/hardware/onyx/eink/patches"
+)
+
 # git am needs a committer identity; use a neutral one if none is configured.
 if ! git config user.email >/dev/null 2>&1; then
     export GIT_COMMITTER_NAME="${GIT_COMMITTER_NAME:-local}"
@@ -34,7 +38,8 @@ if (( ${#TOPICS[@]} == 0 )); then
 fi
 
 for topic in "${TOPICS[@]}"; do
-    [[ -d "$PATCHES_ROOT/$topic" ]] || die "unknown topic: $topic"
+    topic_dir="${TOPIC_DIRS[$topic]:-$PATCHES_ROOT/$topic}"
+    [[ -d "$topic_dir" ]] || die "unknown topic: $topic ($topic_dir not found)"
     declare -n ORDER="ORDER_$topic"
 
     for dir in "${ORDER[@]}"; do
@@ -46,7 +51,7 @@ for topic in "${TOPICS[@]}"; do
         [[ -z "$(git -C "$project" status --porcelain --untracked-files=no)" ]] \
             || die "$project has uncommitted changes; commit or reset them first"
 
-        for patch in "$PATCHES_ROOT/$topic/$dir"/*.patch; do
+        for patch in "$topic_dir/$dir"/*.patch; do
             name="$(basename "$patch")"
             if git -C "$project" apply --check --reverse "$patch" >/dev/null 2>&1; then
                 echo "skip    $project: $name (already applied)"

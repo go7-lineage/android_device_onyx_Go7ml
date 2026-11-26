@@ -25,12 +25,6 @@ prebuilt_etc {
 }
 
 sh_binary {
-    name: "init.go7ml.drm.sh",
-    src: "init.go7ml.drm.sh",
-    vendor: true,
-}
-
-sh_binary {
     name: "set_bdaddr.sh",
     src: "set_bdaddr.sh",
     vendor: true,

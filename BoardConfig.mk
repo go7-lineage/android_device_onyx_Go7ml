@@ -115,7 +115,7 @@ BOARD_INCLUDE_RECOVERY_DTBO := true
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/init/fstab.go7ml
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 
-# Graphics: drm_hwcomposer on the e-ink card (onyx-epd, see init.go7ml.drm.sh), minigbm, Mesa
+# Graphics: drm_hwcomposer on the e-ink card (onyx-epd, see init.eink_shim.drm.sh), minigbm, Mesa
 include device/linaro/dragonboard/shared/graphics/drm_hwcomposer/BoardConfig.mk
 BOARD_VENDOR_SEPOLICY_DIRS += \
     device/linaro/dragonboard/shared/graphics/minigbm_msm/sepolicy
@@ -132,6 +132,7 @@ BOARD_HAVE_BLUETOOTH := true
 BOARD_VENDOR_SEPOLICY_DIRS += \
     device/linaro/dragonboard/sepolicy \
     $(DEVICE_PATH)/sepolicy/vendor \
+    hardware/onyx/eink/sepolicy \
     vendor/onyx/sensors/sepolicy
 
 DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/manifest.xml

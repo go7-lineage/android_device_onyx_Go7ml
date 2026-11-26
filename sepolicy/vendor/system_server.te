@@ -2,4 +2,3 @@
 # boot). So do apps, bootanim and surfaceflinger, and the platform policy silences it for them: the same set
 # of processes that load the vendor's graphics libraries, so most likely Mesa's option lookups.
 dontaudit system_server vendor_default_prop:file read;
-allow system_server sysfs_sepdc_flash:file { getattr w_file_perms };
