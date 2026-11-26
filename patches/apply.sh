@@ -51,10 +51,16 @@ for topic in "${TOPICS[@]}"; do
         [[ -z "$(git -C "$project" status --porcelain --untracked-files=no)" ]] \
             || die "$project has uncommitted changes; commit or reset them first"
 
+        recent="$(git -C "$project" log -n 200 --format=%s)"
         for patch in "$topic_dir/$dir"/*.patch; do
             name="$(basename "$patch")"
             if git -C "$project" apply --check --reverse "$patch" >/dev/null 2>&1; then
                 echo "skip    $project: $name (already applied)"
+                continue
+            fi
+            subject="$(git mailinfo /dev/null /dev/null < "$patch" | sed -n 's/^Subject: //p')"
+            if [[ -n "$subject" ]] && grep -qxF -- "$subject" <<< "$recent"; then
+                echo "skip    $project: $name (already applied: same subject)"
                 continue
             fi
             if ! git -C "$project" -c commit.gpgsign=false am --3way "$patch"; then
