@@ -1,5 +1,7 @@
 # Go 7 on the mainline kernel
 
+import /vendor/etc/init/hw/init.go7ml.usb.rc
+
 # Internal speaker and microphones: audio DSP, sound card and mixer paths
 service vendor.go7ml-audio /vendor/bin/init.go7ml.audio.sh
     user root

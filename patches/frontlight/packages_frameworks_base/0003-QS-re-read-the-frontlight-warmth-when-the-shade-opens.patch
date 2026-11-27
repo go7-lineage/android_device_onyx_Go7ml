@@ -1,0 +1,66 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Go7 port <go7-port@example.invalid>
+Date: Fri, 27 Nov 2026 12:00:00 +0000
+Subject: [PATCH] QS: re-read the frontlight warmth when the shade opens
+
+QS stays composed while the shade is closed, so the warmth slider kept
+the value it read first and missed changes from other apps, such as
+KOReader through the frontlight service. Read the property again each
+time QS becomes visible, and skip writing a value the property already
+holds.
+---
+ .../brightness/ui/compose/WarmthSlider.kt         | 15 ++++++++++-----
+ .../qs/composefragment/QSFragmentCompose.kt       |  5 ++++-
+ 2 files changed, 14 insertions(+), 6 deletions(-)
+
+diff --git a/packages/SystemUI/src/com/android/systemui/brightness/ui/compose/WarmthSlider.kt b/packages/SystemUI/src/com/android/systemui/brightness/ui/compose/WarmthSlider.kt
+index 4c41a6ceb..a09d794bd 100644
+--- a/packages/SystemUI/src/com/android/systemui/brightness/ui/compose/WarmthSlider.kt
++++ b/packages/SystemUI/src/com/android/systemui/brightness/ui/compose/WarmthSlider.kt
+@@ -81,20 +81,25 @@ private suspend fun Animatable<Float, AnimationVector1D>.appear() =
+ private suspend fun Animatable<Float, AnimationVector1D>.disappear() =
+     animateTo(targetValue = 0f, animationSpec = IconDisappearSpec)
+ 
++private fun readWarmth() = SystemProperties.getInt(WARMTH_PROP, 0).coerceIn(0, WARMTH_MAX)
++
+ @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
+ @Composable
+-fun WarmthSliderContainer(modifier: Modifier = Modifier) {
++fun WarmthSliderContainer(visible: Boolean, modifier: Modifier = Modifier) {
+     val description = stringResource(R.string.accessibility_warmth)
+-    var value by remember {
+-        mutableIntStateOf(SystemProperties.getInt(WARMTH_PROP, 0).coerceIn(0, WARMTH_MAX))
+-    }
++    var value by remember { mutableIntStateOf(readWarmth()) }
++    LaunchedEffect(visible) { if (visible) value = readWarmth() }
+     // Written live while dragging, off the main thread; a slow write skips to the latest value
+     LaunchedEffect(Unit) {
+         snapshotFlow { value }
+             .drop(1)
+             .collect { v ->
+                 withContext(Dispatchers.IO) {
+-                    kotlin.runCatching { SystemProperties.set(WARMTH_PROP, v.toString()) }
++                    kotlin.runCatching {
++                        if (SystemProperties.getInt(WARMTH_PROP, -1) != v) {
++                            SystemProperties.set(WARMTH_PROP, v.toString())
++                        }
++                    }
+                 }
+             }
+     }
+diff --git a/packages/SystemUI/src/com/android/systemui/qs/composefragment/QSFragmentCompose.kt b/packages/SystemUI/src/com/android/systemui/qs/composefragment/QSFragmentCompose.kt
+index 585ee72a1..90404c663 100644
+--- a/packages/SystemUI/src/com/android/systemui/qs/composefragment/QSFragmentCompose.kt
++++ b/packages/SystemUI/src/com/android/systemui/qs/composefragment/QSFragmentCompose.kt
+@@ -962,7 +962,10 @@ constructor(
+                             ),
+                         modifier = Modifier.weight(1f),
+                     )
+-                    WarmthSliderContainer(modifier = Modifier.weight(1f))
++                    WarmthSliderContainer(
++                        visible = viewModel.isQsVisibleAndAnyShadeExpanded,
++                        modifier = Modifier.weight(1f),
++                    )
+                 }
+             }
+         }

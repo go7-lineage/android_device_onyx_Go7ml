@@ -20,7 +20,7 @@ prebuilt_etc {
 prebuilt_etc {
     name: "init.go7ml.usb.rc",
     src: "init.go7ml.usb.rc",
-    sub_dir: "init",
+    sub_dir: "init/hw",
     vendor: true,
 }
 
