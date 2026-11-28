@@ -1,0 +1,1 @@
+allow charger_vendor dri_device:dir search;
