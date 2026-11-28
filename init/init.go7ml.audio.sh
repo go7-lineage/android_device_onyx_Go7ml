@@ -26,10 +26,10 @@ m "AUX_RDAC Switch" 1
 m "RX_RX2 Digital Volume" 78
 # item 3 = class AB (wcd937x.c shows it as "CLS_H_LP": its labels are one off)
 m "RX HPH Mode" 3
-# Recording: the two digital microphones through the VA macro to MultiMedia1 (PCM device 0). The first
-# channel is DMIC2, the microphone stock records mono from.
+# Recording: the microphone on DMIC data line 0 through the VA macro to MultiMedia1 (PCM device 0), on both
+# channels. DMIC2, the one stock records from, adds a 7-9 kHz hiss here.
 m "MultiMedia1 Mixer VA_CODEC_DMA_TX_0" 1
-m "VA DMIC MUX0" DMIC2
+m "VA DMIC MUX0" DMIC0
 m "VA DEC0 MUX" VA_DMIC
 m "VA_AIF1_CAP Mixer DEC0" 1
 m "VA DMIC MUX1" DMIC0
