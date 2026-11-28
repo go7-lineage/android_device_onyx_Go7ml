@@ -1,0 +1,55 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Go7 port <go7-port@example.invalid>
+Date: Sat, 28 Nov 2026 16:00:00 +0000
+Subject: [PATCH 1/2] audio: make the blocking MonoPipe four buffers long
+
+StreamAlsaMonoPipe gives each input stream a MonoPipe of one HAL buffer
+and writes into it with writeCanBlock set. A blocking MonoPipe::write
+sleeps after every write to keep the fill near its setpoint (11/16 of
+the size): after a whole buffer goes into the empty pipe it sleeps 1.15
+times the buffer's duration. The I/O thread then delivers one buffer
+per 1.15 buffer durations while StreamPrimary reads one per buffer
+duration, so about every seventh read finds the pipe empty and returns
+a buffer of silence. The frames it missed stay in ALSA, where the
+backlog grows until the driver overwrites periods nobody has read.
+
+On an SM7225 (q6asm, 44.1 kHz mono, 4096-frame buffers) a 12.7 s
+recording got 20 buffers of silence, one every 0.65 or 0.74 s.
+
+With four buffers the fill stays below the setpoint, the writer keeps
+pace with ALSA, and after start-up every read finds a full buffer.
+---
+ audio/aidl/default/alsa/StreamAlsaMonoPipe.cpp | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/audio/aidl/default/alsa/StreamAlsaMonoPipe.cpp b/audio/aidl/default/alsa/StreamAlsaMonoPipe.cpp
+index 3738f30..1d26ca8 100644
+--- a/audio/aidl/default/alsa/StreamAlsaMonoPipe.cpp
++++ b/audio/aidl/default/alsa/StreamAlsaMonoPipe.cpp
+@@ -25,6 +25,12 @@ using aidl::android::hardware::audio::common::getChannelCount;
+ 
+ namespace aidl::android::hardware::audio::core {
+ 
++namespace {
++
++constexpr size_t kBlockingPipeBufferCount = 4;
++
++}  // namespace
++
+ StreamAlsaMonoPipe::StreamAlsaMonoPipe(StreamContext* context, const Metadata& metadata,
+                                        int readWriteRetries)
+     : StreamAlsaBase(context, metadata, readWriteRetries) {}
+@@ -42,7 +48,9 @@ StreamAlsaMonoPipe::~StreamAlsaMonoPipe() {
+ 
+ ::android::sp<::android::MonoPipe> StreamAlsaMonoPipe::makeSink(bool writeCanBlock) {
+     const ::android::NBAIO_Format format = getPipeFormat();
+-    auto sink = ::android::sp<::android::MonoPipe>::make(mBufferSizeFrames, format, writeCanBlock);
++    const size_t pipeFrames =
++            writeCanBlock ? mBufferSizeFrames * kBlockingPipeBufferCount : mBufferSizeFrames;
++    auto sink = ::android::sp<::android::MonoPipe>::make(pipeFrames, format, writeCanBlock);
+     const ::android::NBAIO_Format offers[1] = {format};
+     size_t numCounterOffers = 0;
+     ssize_t index = sink->negotiate(offers, 1, nullptr, numCounterOffers);
+-- 
+2.54.0
+

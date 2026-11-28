@@ -11,12 +11,13 @@ declare -A PROJECTS=(
     [system_sepolicy]=system/sepolicy
     [lineage-sdk]=lineage-sdk
     [external_tinyalsa_new]=external/tinyalsa_new
+    [hardware_interfaces]=hardware/interfaces
 )
 ORDER_frontlight=(packages_frameworks_base system_sepolicy)
 # eink's sepolicy patch applies on top of frontlight's, keep it after
 ORDER_eink=(packages_frameworks_base system_sepolicy)
 ORDER_charging=(lineage-sdk)
-ORDER_audio=(external_tinyalsa_new)
+ORDER_audio=(external_tinyalsa_new hardware_interfaces)
 
 die() { printf '\n*** ERROR: %s\n' "$*" >&2; exit 1; }
 

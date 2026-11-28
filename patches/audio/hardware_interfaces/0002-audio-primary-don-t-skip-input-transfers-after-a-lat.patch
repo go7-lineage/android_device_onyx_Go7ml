@@ -1,0 +1,34 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Go7 port <go7-port@example.invalid>
+Date: Sat, 28 Nov 2026 16:00:00 +0000
+Subject: [PATCH 2/2] audio: primary: don't skip input transfers after a late
+ one
+
+When a transfer returns later than its wall-clock schedule,
+StreamPrimary turns the next one into a buffer of zeros without
+touching the stream. For output that drops data to catch up. For input
+it inserts silence while the captured frames stay in the pipe, so each
+late read adds a gap and a buffer of backlog that is never read back.
+
+Skip only output transfers. An input stream catches up by reading what
+has already been captured.
+---
+ audio/aidl/default/primary/StreamPrimary.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/audio/aidl/default/primary/StreamPrimary.cpp b/audio/aidl/default/primary/StreamPrimary.cpp
+index ac0d302..f91ea77 100644
+--- a/audio/aidl/default/primary/StreamPrimary.cpp
++++ b/audio/aidl/default/primary/StreamPrimary.cpp
+@@ -121,7 +121,7 @@ StreamPrimary::StreamPrimary(StreamContext* context, const Metadata& metadata)
+             const long sleepTimeUs = std::min(totalOffsetUs, bufferDurationUs);
+             LOG(VERBOSE) << __func__ << ": sleeping for " << sleepTimeUs << " us";
+             usleep(sleepTimeUs);
+-        } else {
++        } else if (!mIsInput) {
+             mSkipNextTransfer = true;
+         }
+     } else {
+-- 
+2.54.0
+
