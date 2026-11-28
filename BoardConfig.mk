@@ -114,6 +114,7 @@ BOARD_RECOVERYIMAGE_PARTITION_SIZE := 100663296
 BOARD_INCLUDE_RECOVERY_DTBO := true
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/init/fstab.go7ml
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
+TARGET_RECOVERY_NO_INITIAL_MODSET_FLUSH := true
 
 # Graphics: drm_hwcomposer on the e-ink card (onyx-epd, see init.eink_shim.drm.sh), minigbm, Mesa
 include device/linaro/dragonboard/shared/graphics/drm_hwcomposer/BoardConfig.mk
