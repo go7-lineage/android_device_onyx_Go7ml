@@ -1,0 +1,64 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Go7 port <go7-port@example.invalid>
+Date: Sat, 28 Nov 2026 15:30:00 +0000
+Subject: [PATCH] charger: Allow devices to disable the vendor charger
+ resources
+
+Soong writes install rules for every module, also for those not in
+PRODUCT_PACKAGES, so a device that installs its own
+/vendor/etc/res/values/charger/animation.txt fails in kati even with
+WITH_LINEAGE_CHARGER := false. Setting the bool soong config variable
+lineage_charger.vendor to false disables the four vendor modules.
+---
+ charger/Android.bp | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/charger/Android.bp b/charger/Android.bp
+index 6da0fa0..9839bab 100644
+--- a/charger/Android.bp
++++ b/charger/Android.bp
+@@ -8,6 +8,11 @@ lineage_charger_density = select(soong_config_variable("lineage_charger", "densi
+     default: "mdpi",
+ })
+ 
++lineage_charger_vendor = select(soong_config_variable("lineage_charger", "vendor"), {
++    false: false,
++    default: true,
++})
++
+ prebuilt_etc {
+     name: "lineage_charger_battery_scale",
+     filename: "battery_scale.png",
+@@ -22,6 +27,7 @@ prebuilt_etc {
+     src: lineage_charger_density + "/battery_scale.png",
+     relative_install_path: "res/images/charger",
+     proprietary: true,
++    enabled: lineage_charger_vendor,
+ }
+ 
+ prebuilt_etc {
+@@ -38,6 +44,7 @@ prebuilt_etc {
+     src: lineage_charger_density + "/battery_fail.png",
+     relative_install_path: "res/images/charger",
+     proprietary: true,
++    enabled: lineage_charger_vendor,
+ }
+ 
+ prebuilt_etc {
+@@ -54,6 +61,7 @@ prebuilt_etc {
+     src: lineage_charger_density + "/percent_font.png",
+     relative_install_path: "res/images/charger",
+     proprietary: true,
++    enabled: lineage_charger_vendor,
+ }
+ 
+ prebuilt_etc {
+@@ -82,4 +90,5 @@ prebuilt_etc {
+     src: "animation.txt",
+     relative_install_path: "res/values/charger",
+     proprietary: true,
++    enabled: lineage_charger_vendor,
+ }
+-- 
+2.54.0
+

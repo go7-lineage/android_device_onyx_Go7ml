@@ -71,6 +71,14 @@ on post-fs-data
 
 on shutdown
     stop rmtfs
+    mkdir /metadata/go7ml 0700 root root
+    copy /sys/class/power_supply/pm7250b-charger/charge_control_end_threshold /metadata/go7ml/charge_end
+    copy /sys/class/power_supply/pm7250b-charger/charge_control_start_threshold /metadata/go7ml/charge_start
+
+on charger
+    wait /sys/class/power_supply/pm7250b-charger/charge_control_end_threshold
+    copy /metadata/go7ml/charge_end /sys/class/power_supply/pm7250b-charger/charge_control_end_threshold
+    copy /metadata/go7ml/charge_start /sys/class/power_supply/pm7250b-charger/charge_control_start_threshold
 
 service vendor.go7ml-wlanaddr /vendor/bin/init.go7ml.wlanaddr.sh
     user root
